@@ -25,3 +25,26 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@layer components {
+  .blinking-cursor:after {
+    content: '|';
+    color: text-secondary-300;
+    animation: blink 1s step-start 15s
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.logo:nth-child(odd) {
+  color: blue;
+}
+
+.logo:nth-child(even) {
+  color: red;
+}
+
