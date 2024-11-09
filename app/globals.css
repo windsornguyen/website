@@ -3,9 +3,18 @@
 @tailwind utilities;
 
 :root {
+  --font-family-sans: 'Inter', sans-serif;
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --sh-class: #7aa2f7;
+  --sh-sign: #89ddff;
+  --sh-string: #9ece6a;
+  --sh-keyword: #bb9af7;
+  --sh-comment: #565f89;
+  --sh-jsxliterals: #7aa2f7;
+  --sh-property: #73daca;
+  --sh-entity: #e0af68;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,26 +25,22 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 @layer components {
-  .blinking-cursor:after {
+  .blinking-cursor::after {
     content: '|';
-    color: text-secondary-300;
-    animation: blink 1s step-start 15s
+    color: var(--text-secondary-300, #89ddff);
+    animation: blink 1s step-start infinite;
   }
 }
 
 @keyframes blink {
-  50% {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
     opacity: 0;
   }
 }
@@ -48,3 +53,224 @@ body {
   color: red;
 }
 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  pre {
+    background-color: #16161e;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    line-height: 1.5;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  pre::-webkit-scrollbar {
+    display: none;
+  }
+
+  pre {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  code {
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    padding: 0.2em 0.4em;
+    border-radius: 0.3em;
+    background-color: var(--color-gray-100);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  pre code {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  pre code > span .sh__token--identifier {
+    color: white !important;
+  }
+
+  code:not(pre code) span {
+    font-weight: 500;
+    color: black !important;
+  }
+
+  pre code span {
+    font-weight: 500;
+  }
+
+  hr {
+    color: var(--color-gray-200);
+  }
+
+  input[type='text'],
+  input[type='email'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  @layer utilities {
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .prevent-bounce {
+      overscroll-behavior-y: none;
+    }
+  }
+
+  table {
+    display: block;
+    max-width: fit-content;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .transition-element {
+    view-transition-name: windsor;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    transform-origin: 0 0;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    contain: layout style paint;
+  }
+
+  ::view-transition-old(windsor) {
+    animation: fade-out 0.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+
+  ::view-transition-new(windsor) {
+    animation: fade-in-up 0.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+
+  @keyframes fade-out {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      font-weight: 500;
+    }
+    100% {
+      transform: translate3d(0, 24px, 0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      transform: translate3d(0, 24px, 0);
+      opacity: 0;
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  @supports (view-transition-name: none) {
+    .fade-in {
+      animation: fade-in 0.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      opacity: 0;
+    }
+  }
+
+  @supports not (view-transition-name: none) {
+    .transition-element {
+      animation: fade-in-up 0.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+  }
+}
+
+/* Dark theme adjustments moved outside `@layer base` */
+.dark {
+  --background: 0 0% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 14.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 14.9%;
+  --muted-foreground: 0 0% 63.9%;
+  --accent: 0 0% 14.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 14.9%;
+  --input: 0 0% 14.9%;
+  --ring: 0 0% 83.1%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}
