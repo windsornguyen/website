@@ -2,7 +2,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { HeadContent, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
 
-import Cursor from "@/components/animated-cursor";
 import Footer from "@/components/footer";
 import { siteMetadata } from "../content/contentManifest";
 
@@ -104,7 +103,6 @@ function RootLayout() {
     <div className="flex min-h-screen flex-col justify-between bg-white p-8 pt-0 text-gray-900 md:pt-8">
       <main className="mx-auto w-full max-w-[60ch] space-y-6">
         <Outlet />
-        <Cursor />
       </main>
       <Footer />
       <Analytics />
