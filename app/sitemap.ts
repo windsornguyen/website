@@ -1,11 +1,11 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from "fs";
+import path from "path";
 
 // Primary routes
-const siteStructure = [{ route: 'blog', dir: path.join(process.cwd(), 'app', 'blog') }];
+const siteStructure = [{ route: "blog", dir: path.join(process.cwd(), "app", "blog") }];
 
 // Utility function to get slugs and last modified timestamps from a directory
-async function getSlugs(dir: string, filePattern = '.mdx') {
+async function getSlugs(dir: string, filePattern = ".mdx") {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   const slugs = [];
 
@@ -38,7 +38,7 @@ export default async function sitemap() {
         url: `https://windsornguyen.com/${route}/${slug}`,
         lastModified,
       }));
-    })
+    }),
   );
 
   // Flatten the array of routes and return
