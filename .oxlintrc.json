@@ -11,11 +11,18 @@
   },
   "ignorePatterns": [
     "**/node_modules/**",
-    "**/.next/**",
     "**/.output/**",
     "**/coverage/**",
     "**/.git/**",
     "**/src/routeTree.gen.ts"
+  ],
+  "overrides": [
+    {
+      "files": ["scripts/**"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
   ],
   "rules": {
     "no-console": "warn",

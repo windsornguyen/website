@@ -1,3 +1,4 @@
+import { recmaCodeHike, remarkCodeHike } from "codehike/mdx";
 import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
@@ -5,6 +6,13 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vitest/config";
+
+const codeHikeConfig = {
+  components: { code: "Code" },
+  syntaxHighlighting: {
+    theme: "github-dark",
+  },
+};
 
 export default defineConfig({
   resolve: {
@@ -17,7 +25,13 @@ export default defineConfig({
   plugins: [
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
     tailwindcss(),
-    mdx(),
+    {
+      enforce: "pre",
+      ...mdx({
+        remarkPlugins: [[remarkCodeHike, codeHikeConfig]],
+        recmaPlugins: [[recmaCodeHike, codeHikeConfig]],
+      }),
+    },
     tanstackStart({
       prerender: {
         enabled: true,
@@ -28,6 +42,7 @@ export default defineConfig({
     }),
     viteReact(),
     babel({
+      exclude: [/\.mdx?$/],
       presets: [reactCompilerPreset()],
     }),
   ],
