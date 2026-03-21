@@ -9,7 +9,14 @@
   "globals": {
     "React": "readonly"
   },
-  "ignorePatterns": ["**/node_modules/**", "**/.next/**", "**/coverage/**", "**/.git/**"],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/.output/**",
+    "**/coverage/**",
+    "**/.git/**",
+    "**/src/routeTree.gen.ts"
+  ],
   "rules": {
     "no-console": "warn",
     "no-var": "error",

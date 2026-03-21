@@ -1,10 +1,10 @@
-import { Link } from "next-view-transitions";
+import ViewTransitionLink from "@/components/view-transition-link";
 
 const AnimatedName = () => {
   return (
-    <Link href="/" className="fade-in mb-8 font-medium text-gray-400">
+    <ViewTransitionLink to="/" className="fade-in mb-8 font-medium text-gray-400">
       Windsor Nguyễn
-    </Link>
+    </ViewTransitionLink>
   );
 };
 

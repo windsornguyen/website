@@ -1,7 +1,8 @@
 import type { ComponentPropsWithoutRef } from "react";
-import { Link } from "next-view-transitions";
 import type { MDXComponents } from "mdx/types";
 import { highlight } from "sugar-high";
+
+import ViewTransitionLink from "@/components/view-transition-link";
 
 type HeadingProps = ComponentPropsWithoutRef<"h1">;
 type ParagraphProps = ComponentPropsWithoutRef<"p">;
@@ -10,8 +11,10 @@ type ListItemProps = ComponentPropsWithoutRef<"li">;
 type AnchorProps = ComponentPropsWithoutRef<"a">;
 type BlockquoteProps = ComponentPropsWithoutRef<"blockquote">;
 
-const components: MDXComponents = {
-  h1: (props: HeadingProps) => <h1 className="fade-in mb-0 pt-12 font-medium" {...props} />,
+export const mdxComponents: MDXComponents = {
+  h1: (props: HeadingProps) => (
+    <h1 className="transition-element mb-0 pt-12 font-medium" {...props} />
+  ),
   h2: (props: HeadingProps) => <h2 className="mt-8 mb-3 font-medium text-gray-800" {...props} />,
   h3: (props: HeadingProps) => <h3 className="mt-8 mb-3 font-medium text-gray-800" {...props} />,
   h4: (props: HeadingProps) => <h4 className="font-medium" {...props} />,
@@ -27,9 +30,9 @@ const components: MDXComponents = {
     const className = "text-blue-500 hover:text-blue-700";
     if (href?.startsWith("/")) {
       return (
-        <Link href={href} className={className} {...props}>
+        <ViewTransitionLink to={href} className={className} {...props}>
           {children}
-        </Link>
+        </ViewTransitionLink>
       );
     }
     if (href?.startsWith("#")) {
@@ -73,10 +76,3 @@ const components: MDXComponents = {
     <blockquote className="ml-[0.075em] border-l-3 border-gray-300 pl-4 text-gray-700" {...props} />
   ),
 };
-
-export function useMDXComponents(otherComponents: MDXComponents): MDXComponents {
-  return {
-    ...otherComponents,
-    ...components,
-  };
-}
