@@ -19,32 +19,22 @@ export type BlogPostMetadata = {
   publishedAt: string;
 };
 
-export type BlogPostEntry = BlogPostMetadata & {
-  loadComponent: () => Promise<MdxPageComponent>;
+type BlogPostModule = {
+  default: MdxPageComponent;
+  postMetadata: BlogPostMetadata;
 };
 
-const blogMetadataModules = import.meta.glob<BlogPostMetadata>("../../content/blog/*.mdx", {
-  eager: true,
-  import: "postMetadata",
-});
+export type BlogPostEntry = BlogPostMetadata & {
+  Component: MdxPageComponent;
+};
 
-const blogComponentModules = import.meta.glob<MdxPageComponent>("../../content/blog/*.mdx", {
-  import: "default",
-});
+const blogModules = import.meta.glob<BlogPostModule>("../../content/blog/*.mdx", { eager: true });
 
-const blogPosts = Object.entries(blogMetadataModules)
-  .map(([path, postMetadata]) => {
-    const loadComponent = blogComponentModules[path];
-
-    if (!loadComponent) {
-      throw new Error(`Missing MDX component loader for blog module: ${path}`);
-    }
-
-    return {
-      ...postMetadata,
-      loadComponent: async () => loadComponent(),
-    };
-  })
+const blogPosts = Object.values(blogModules)
+  .map(({ default: Component, postMetadata }) => ({
+    ...postMetadata,
+    Component,
+  }))
   .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
 
 const postsBySlug = new Map(blogPosts.map((post) => [post.slug, post]));
