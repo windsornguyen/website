@@ -1,3 +1,4 @@
+import { use } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { mdxComponents } from "@/mdx-components";
@@ -67,5 +68,7 @@ function BlogPostRoute() {
     throw notFound();
   }
 
-  return <post.Component components={mdxComponents} />;
+  const Component = use(post.loadComponent());
+
+  return <Component components={mdxComponents} />;
 }
