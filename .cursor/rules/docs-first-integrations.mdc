@@ -1,0 +1,11 @@
+---
+description: Prefer current docs and examples over memory
+alwaysApply: true
+---
+
+# Docs First
+
+- For integrations, framework APIs, and tool configuration, prefer current official docs or upstream examples over memory.
+- Before proposing or implementing non-trivial setup for tools like TanStack, Vite, Vitest, Nitro, React Compiler, CodeHike, Vercel, Deno, Oxc, or similar infrastructure, look up the current docs/examples first.
+- Treat memory as a hint, not a source of truth, when the behavior is version-sensitive.
+- If docs and real package behavior disagree, say so explicitly and bias toward what is documented and reproducible in this repo.
