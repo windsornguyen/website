@@ -1,0 +1,196 @@
+/*
+ * Command palette styles (cmdk library).
+ *
+ * cmdk renders its own DOM with data-attribute selectors like [cmdk-input],
+ * [cmdk-item], [cmdk-list], etc. We can't attach Tailwind classes to those
+ * elements since they're internal to the library, so raw CSS is required.
+ *
+ * Component: components/command-menu.tsx
+ * Docs: https://github.com/dip/cmdk
+ */
+
+/* --- Dialog (full-screen overlay container) --- */
+.cmdk-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 18vh;
+}
+
+/* --- Backdrop (translucent + blur behind the panel) --- */
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* --- Panel (floating card that holds input + list) --- */
+.cmdk-panel {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 16px;
+  background: var(--color-cream);
+  border-radius: 12px;
+  border: 1px solid var(--color-gray-200, #e5e5e5);
+  box-shadow:
+    0 16px 70px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  font-family: var(--font-family-sans);
+  animation: cmdk-enter 0.15s ease;
+}
+
+.dark .cmdk-panel {
+  background: var(--color-night-light);
+  border-color: var(--color-gray-800);
+  box-shadow:
+    0 16px 70px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* --- Panel entrance (scale from 0.96, not 0 — per Rauno's guidelines) --- */
+@keyframes cmdk-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- Search input --- */
+.cmdk-panel [cmdk-input] {
+  border: none;
+  width: 100%;
+  font-size: 15px;
+  padding: 14px 16px;
+  outline: none;
+  background: transparent;
+  color: var(--color-gray-900, #171717);
+  border-bottom: 1px solid var(--color-gray-100, #f5f5f5);
+  border-radius: 0;
+  font-family: var(--font-family-sans);
+  letter-spacing: -0.011em;
+}
+
+.cmdk-panel [cmdk-input]::placeholder {
+  color: var(--color-gray-400, #a3a3a3);
+}
+
+.dark .cmdk-panel [cmdk-input] {
+  color: var(--color-gray-100);
+  border-bottom-color: var(--color-gray-800);
+}
+
+.dark .cmdk-panel [cmdk-input]::placeholder {
+  color: var(--color-gray-500);
+}
+
+/* --- Result list (height animates via --cmdk-list-height from cmdk) --- */
+.cmdk-panel [cmdk-list] {
+  height: min(320px, var(--cmdk-list-height));
+  max-height: 400px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  transition: height 100ms ease;
+  padding: 6px;
+  scroll-padding-block: 6px;
+}
+
+/* --- Result item (content-visibility defers offscreen rendering) --- */
+.cmdk-panel [cmdk-item] {
+  content-visibility: auto;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding: 8px 12px;
+  min-height: 40px;
+  color: var(--color-gray-600, #525252);
+  user-select: none;
+  transition: none;
+  position: relative;
+  letter-spacing: -0.011em;
+}
+
+/* --- Selected item (keyboard/hover highlight) --- */
+.cmdk-panel [cmdk-item][data-selected="true"] {
+  background: var(--color-cream-dark);
+  color: var(--color-gray-900, #171717);
+}
+
+.cmdk-panel [cmdk-item]:active {
+  background: var(--color-cream-dark);
+}
+
+.dark .cmdk-panel [cmdk-item] {
+  color: var(--color-gray-400);
+}
+
+.dark .cmdk-panel [cmdk-item][data-selected="true"] {
+  background: var(--color-gray-800);
+  color: var(--color-gray-100);
+}
+
+.dark .cmdk-panel [cmdk-item]:active {
+  background: var(--color-gray-800);
+}
+
+/* --- Spacing between consecutive items --- */
+.cmdk-panel [cmdk-item] + [cmdk-item] {
+  margin-top: 2px;
+}
+
+/* --- Two-line items (blog posts show title + description) --- */
+.cmdk-item-title {
+  font-weight: 500;
+  color: inherit;
+}
+
+.cmdk-item-subtitle {
+  font-size: 12px;
+  color: var(--color-gray-400, #a3a3a3);
+  line-height: 1.3;
+}
+
+.cmdk-panel [cmdk-item][data-selected="true"] .cmdk-item-subtitle {
+  color: var(--color-gray-500, #737373);
+}
+
+/* --- Spacing between groups (Pages, Writing, Links) --- */
+*:not([hidden]) + [cmdk-group] {
+  margin-top: 6px;
+}
+
+/* --- Group heading (uppercase label above each section) --- */
+.cmdk-panel [cmdk-group-heading] {
+  user-select: none;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-gray-400, #a3a3a3);
+  padding: 6px 12px 4px;
+}
+
+/* --- Empty state (shown when search has no matches) --- */
+.cmdk-panel [cmdk-empty] {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  color: var(--color-gray-400, #a3a3a3);
+  letter-spacing: -0.011em;
+}

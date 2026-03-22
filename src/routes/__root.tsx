@@ -6,6 +6,7 @@ import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/r
 import { CommandMenuProvider } from "@/components/command-menu";
 import Footer from "@/components/footer";
 import SiteChrome from "@/components/site-chrome";
+import { ThemeProvider, useTheme } from "@/components/theme-provider";
 import { siteMetadata } from "../content/contentManifest";
 
 import appCss from "../styles.css?url";
@@ -109,23 +110,85 @@ function RootComponent() {
   );
 }
 
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  function cycle() {
+    const resolved =
+      theme === "system"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+        : theme;
+    setTheme(resolved === "dark" ? "light" : "dark");
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={cycle}
+      className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+      aria-label="Toggle theme"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="block dark:hidden"
+      >
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2" />
+        <path d="M12 20v2" />
+        <path d="m4.93 4.93 1.41 1.41" />
+        <path d="m17.66 17.66 1.41 1.41" />
+        <path d="M2 12h2" />
+        <path d="M20 12h2" />
+        <path d="m6.34 17.66-1.41 1.41" />
+        <path d="m19.07 4.93-1.41 1.41" />
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="hidden dark:block"
+      >
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+      </svg>
+    </button>
+  );
+}
+
 function Nav() {
   return (
-    <nav className="mx-auto flex w-full max-w-[60ch] items-center py-3">
-      <Link to="/" className="text-sm font-medium tracking-tight text-gray-900 hover:text-gray-600">
+    <nav className="mx-auto flex w-full max-w-[60ch] items-center justify-between py-3">
+      <Link to="/" className="text-sm font-medium tracking-tight text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-400">
         Windsor Nguyen
       </Link>
+      <ThemeToggle />
     </nav>
   );
 }
 
 function RootLayout() {
   return (
-    <CommandMenuProvider>
-      <div className="bg-cream flex min-h-screen flex-col px-8 text-gray-900">
-        <header className="bg-cream sticky top-0 z-10">
-          <Nav />
-        </header>
+    <ThemeProvider defaultTheme="system">
+      <CommandMenuProvider>
+        <div className="bg-cream flex min-h-screen flex-col px-8 text-gray-900 dark:bg-night dark:text-gray-100">
+          <header className="bg-cream sticky top-0 z-10 dark:bg-night">
+            <Nav />
+          </header>
         <main className="mx-auto w-full max-w-[60ch] flex-1 pt-1">
           <SiteChrome>
             <Outlet />
@@ -135,7 +198,8 @@ function RootLayout() {
         <Analytics />
         <SpeedInsights />
       </div>
-    </CommandMenuProvider>
+      </CommandMenuProvider>
+    </ThemeProvider>
   );
 }
 

@@ -1,6 +1,8 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentType } from "react";
 
+import type { ResolvedPostMetadata } from "../../content/schema";
+
 export const siteMetadata = {
   title: "Windsor Nguyen",
   titleTemplate: "%s | Windsor Nguyen",
@@ -11,20 +13,12 @@ export const siteMetadata = {
 
 export type MdxPageComponent = ComponentType<{ components?: MDXComponents }>;
 
-export type BlogPostMetadata = {
-  slug: string;
-  title: string;
-  description: string;
-  canonical: string;
-  publishedAt: string;
-};
-
 type BlogPostModule = {
   default: MdxPageComponent;
-  postMetadata: BlogPostMetadata;
+  postMetadata: ResolvedPostMetadata;
 };
 
-export type BlogPostEntry = BlogPostMetadata & {
+export type BlogPostEntry = ResolvedPostMetadata & {
   Component: MdxPageComponent;
 };
 
@@ -35,6 +29,7 @@ const blogPosts = Object.values(blogModules)
     ...postMetadata,
     Component,
   }))
+  .filter((post) => post.status === "published")
   .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
 
 const postsBySlug = new Map(blogPosts.map((post) => [post.slug, post]));

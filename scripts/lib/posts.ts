@@ -1,13 +1,7 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-export type BlogPostMetadata = {
-  slug: string;
-  title: string;
-  description: string;
-  canonical: string;
-  publishedAt: string;
-};
+import type { BlogPostMetadata } from "../../content/schema";
 
 export type BlogPostEntry = BlogPostMetadata & {
   path: string;
@@ -15,7 +9,7 @@ export type BlogPostEntry = BlogPostMetadata & {
 
 const blogDirectory = path.resolve(process.cwd(), "content/blog");
 
-function parseStringField(name: keyof BlogPostMetadata, source: string) {
+function parseStringField(name: string, source: string) {
   const match = source.match(new RegExp(`${name}:\\s*["']([^"']+)["']`));
 
   if (!match) {
@@ -30,8 +24,8 @@ export function parsePostMetadata(source: string): BlogPostMetadata {
     slug: parseStringField("slug", source),
     title: parseStringField("title", source),
     description: parseStringField("description", source),
-    canonical: parseStringField("canonical", source),
     publishedAt: parseStringField("publishedAt", source),
+    status: (parseStringField("status", source) as BlogPostMetadata["status"]) ?? "draft",
   };
 }
 
@@ -56,13 +50,15 @@ export function renderTimestampLabel(isoTimestamp: string) {
 }
 
 export function renderPostTemplate(metadata: BlogPostMetadata) {
-  return `export const postMetadata = {
+  return `import { definePost } from "../schema";
+
+export const postMetadata = definePost({
   slug: "${metadata.slug}",
   title: "${metadata.title}",
   description: "${metadata.description}",
-  canonical: "${metadata.canonical}",
   publishedAt: "${metadata.publishedAt}",
-};
+  status: "${metadata.status}",
+});
 
 # ${metadata.title}
 
@@ -109,12 +105,12 @@ export function validatePostEntries(posts: BlogPostEntry[]) {
 
     seenSlugs.add(post.slug);
 
-    if (post.canonical !== `/blog/${post.slug}`) {
-      errors.push(`${post.path}: canonical must be "/blog/${post.slug}", got "${post.canonical}"`);
-    }
-
     if (Number.isNaN(Date.parse(post.publishedAt))) {
       errors.push(`${post.path}: publishedAt must be a valid ISO timestamp`);
+    }
+
+    if (post.status !== "draft" && post.status !== "published") {
+      errors.push(`${post.path}: status must be "draft" or "published", got "${post.status}"`);
     }
   }
 

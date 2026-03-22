@@ -1,22 +1,31 @@
 @import "@fontsource-variable/inter";
 @import "tailwindcss";
+@import "./cmdk.css";
 
+/*
+ * Tailwind content sources — tells the compiler where to scan for
+ * utility class usage so it can tree-shake unused CSS.
+ */
 @source "../components/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../content/**/*.{md,mdx}";
 @source "../lib/**/*.{js,ts,jsx,tsx}";
 @source "./**/*.{js,ts,jsx,tsx,mdx}";
 
+/* Class-based dark mode: .dark on <html> toggles dark variant. */
 @variant dark (&:is(.dark *));
 
 /* --- Design tokens --- */
+/* Exposed as Tailwind utilities: bg-cream, bg-night, etc. */
 @theme {
-  --color-cream: #faf9f6;
-  --color-cream-dark: #f0eee6;
+  --color-cream: #faf9f6;       /* light bg */
+  --color-cream-dark: #f0eee6;  /* light hover / code bg */
+  --color-night: #0a0a0a;       /* dark bg */
+  --color-night-light: #1a1a1a; /* dark hover / code bg */
 }
 
 /* --- Base resets --- */
 @layer base {
-  /* --- Border default --- */
+  /* --- Default border color (Tailwind `border` utility inherits this) --- */
   *,
   ::after,
   ::before,
@@ -25,11 +34,20 @@
     border-color: var(--color-gray-200, currentColor);
   }
 
+  .dark *,
+  .dark ::after,
+  .dark ::before,
+  .dark ::backdrop,
+  .dark ::file-selector-button {
+    border-color: var(--color-gray-800, currentColor);
+  }
+
+  /* --- Text rendering --- */
   body {
     text-rendering: optimizeLegibility;
   }
 
-  /* --- Interactive cursor --- */
+  /* --- Pointer on all interactive elements (no per-element cursor-pointer) --- */
   a,
   button,
   [role="button"],
@@ -40,7 +58,7 @@
     cursor: pointer;
   }
 
-  /* --- Heading wrap --- */
+  /* --- Prevent orphaned words on heading lines --- */
   h1,
   h2,
   h3,
@@ -48,7 +66,7 @@
     text-wrap: balance;
   }
 
-  /* --- Code blocks --- */
+  /* --- Fenced code blocks (dark bg, hidden scrollbar) --- */
   pre {
     background-color: #16161e;
     border-radius: 0.5rem;
@@ -64,7 +82,7 @@
     display: none;
   }
 
-  /* --- Inline code --- */
+  /* --- Inline code (cream pill in light, night pill in dark) --- */
   code {
     font-family: "Menlo", "Monaco", "Courier New", monospace;
     font-size: 14px;
@@ -73,6 +91,11 @@
     background-color: var(--color-cream-dark);
   }
 
+  .dark code {
+    background-color: var(--color-night-light);
+  }
+
+  /* --- Reset inline-code styles inside <pre> --- */
   pre code {
     background-color: transparent;
     padding: 0;
@@ -81,7 +104,7 @@
     line-height: 1.5;
   }
 
-  /* --- sugar-high token overrides --- */
+  /* --- sugar-high syntax token colors (runtime via --sh-* vars) --- */
   pre code > span .sh__token--identifier {
     color: white !important;
   }
@@ -91,15 +114,20 @@
     color: black !important;
   }
 
+  .dark code:not(pre code) span {
+    color: #e5e5e5 !important;
+  }
+
   pre code span {
     font-weight: 500;
   }
 
+  /* --- Horizontal rules --- */
   hr {
     color: var(--color-gray-200);
   }
 
-  /* --- iOS input reset --- */
+  /* --- Strip native iOS input styling --- */
   input[type="text"],
   input[type="email"] {
     -webkit-appearance: none;
@@ -107,7 +135,7 @@
     appearance: none;
   }
 
-  /* --- Scrollable tables --- */
+  /* --- Wide tables scroll horizontally --- */
   table {
     display: block;
     max-width: fit-content;
@@ -115,7 +143,9 @@
     white-space: nowrap;
   }
 
-  /* --- View transitions --- */
+  /* --- View transitions (route navigation animation) --- */
+  /* Applied via className="transition-element" in animated-name and mdx h1. */
+  /* Uses the View Transitions API with a graceful JS-animation fallback.    */
   .transition-element {
     view-transition-name: windsor;
     will-change: transform, opacity;
@@ -147,12 +177,8 @@
   }
 
   @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes fade-in-up {
@@ -166,7 +192,7 @@
     }
   }
 
-  /* --- View transition fallback --- */
+  /* --- Fallback for browsers without View Transitions API --- */
   @supports (view-transition-name: none) {
     .fade-in {
       animation: fade-in 0.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
@@ -181,12 +207,12 @@
   }
 }
 
-/* --- Root properties --- */
+/* --- Custom properties --- */
 @layer utilities {
   :root {
     --font-family-sans: "Inter Variable", sans-serif;
 
-    /* --- sugar-high syntax theme (Tokyo Night) --- */
+    /* sugar-high syntax theme (Tokyo Night palette) */
     --sh-class: #7aa2f7;
     --sh-sign: #89ddff;
     --sh-string: #9ece6a;
@@ -196,158 +222,4 @@
     --sh-property: #73daca;
     --sh-entity: #e0af68;
   }
-}
-
-/* --- Command palette (cmdk) --- */
-
-.cmdk-dialog {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 18vh;
-}
-
-/* --- Backdrop --- */
-.cmdk-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-/* --- Panel --- */
-.cmdk-panel {
-  position: relative;
-  width: 100%;
-  max-width: 520px;
-  margin: 0 16px;
-  background: var(--color-cream);
-  border-radius: 12px;
-  border: 1px solid var(--color-gray-200, #e5e5e5);
-  box-shadow:
-    0 16px 70px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  font-family: var(--font-family-sans);
-  animation: cmdk-enter 0.15s ease;
-}
-
-@keyframes cmdk-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* --- Input --- */
-.cmdk-panel [cmdk-input] {
-  border: none;
-  width: 100%;
-  font-size: 15px;
-  padding: 14px 16px;
-  outline: none;
-  background: transparent;
-  color: var(--color-gray-900, #171717);
-  border-bottom: 1px solid var(--color-gray-100, #f5f5f5);
-  border-radius: 0;
-  font-family: var(--font-family-sans);
-  letter-spacing: -0.011em;
-}
-
-.cmdk-panel [cmdk-input]::placeholder {
-  color: var(--color-gray-400, #a3a3a3);
-}
-
-/* --- List --- */
-.cmdk-panel [cmdk-list] {
-  height: min(320px, var(--cmdk-list-height));
-  max-height: 400px;
-  overflow: auto;
-  overscroll-behavior: contain;
-  transition: height 100ms ease;
-  padding: 6px;
-  scroll-padding-block: 6px;
-}
-
-/* --- Item --- */
-.cmdk-panel [cmdk-item] {
-  content-visibility: auto;
-  cursor: pointer;
-  border-radius: 8px;
-  font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1px;
-  padding: 8px 12px;
-  min-height: 40px;
-  color: var(--color-gray-600, #525252);
-  user-select: none;
-  transition: none;
-  position: relative;
-  letter-spacing: -0.011em;
-}
-
-.cmdk-panel [cmdk-item][data-selected="true"] {
-  background: var(--color-cream-dark);
-  color: var(--color-gray-900, #171717);
-}
-
-.cmdk-panel [cmdk-item]:active {
-  background: var(--color-cream-dark);
-}
-
-.cmdk-panel [cmdk-item] + [cmdk-item] {
-  margin-top: 2px;
-}
-
-/* --- Item title + subtitle --- */
-.cmdk-item-title {
-  font-weight: 500;
-  color: inherit;
-}
-
-.cmdk-item-subtitle {
-  font-size: 12px;
-  color: var(--color-gray-400, #a3a3a3);
-  line-height: 1.3;
-}
-
-.cmdk-panel [cmdk-item][data-selected="true"] .cmdk-item-subtitle {
-  color: var(--color-gray-500, #737373);
-}
-
-/* --- Group --- */
-*:not([hidden]) + [cmdk-group] {
-  margin-top: 6px;
-}
-
-/* --- Group heading --- */
-.cmdk-panel [cmdk-group-heading] {
-  user-select: none;
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-gray-400, #a3a3a3);
-  padding: 6px 12px 4px;
-}
-
-/* --- Empty state --- */
-.cmdk-panel [cmdk-empty] {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 64px;
-  color: var(--color-gray-400, #a3a3a3);
-  letter-spacing: -0.011em;
 }
