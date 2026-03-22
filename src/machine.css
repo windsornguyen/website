@@ -1,0 +1,162 @@
+/* Copyright (c) 2026 Windsor Nguyen. MIT License. */
+
+/*
+ * Machine mode: renders the page as markdown-formatted plaintext.
+ * Activated by adding .machine to <html>. Designed for LLM consumption
+ * with a monospace dark theme that makes the site feel like a terminal.
+ */
+
+/* --- Global overrides --- */
+.machine body {
+  font-family: "Menlo", "Monaco", "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  letter-spacing: 0 !important;
+  background: #0d1117;
+  color: #c9d1d9;
+}
+
+/* --- Strip all decorative styling --- */
+.machine * {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  border-color: #30363d !important;
+}
+
+/* --- Links render as [text](url) markdown syntax --- */
+.machine a[href]::before {
+  content: "[";
+  color: #58a6ff;
+}
+
+.machine a[href]::after {
+  content: "](" attr(href) ")";
+  color: #58a6ff;
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.machine a[href] {
+  color: #58a6ff;
+  text-decoration: none !important;
+}
+
+/* --- Headings get markdown prefix --- */
+.machine h1::before { content: "# "; color: #8b949e; }
+.machine h2::before { content: "## "; color: #8b949e; }
+.machine h3::before { content: "### "; color: #8b949e; }
+.machine h4::before { content: "#### "; color: #8b949e; }
+
+.machine h1,
+.machine h2,
+.machine h3,
+.machine h4 {
+  font-family: inherit;
+  font-weight: 600;
+  font-size: inherit;
+  letter-spacing: 0 !important;
+  color: #f0f6fc;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+/* --- Paragraphs --- */
+.machine p {
+  color: #c9d1d9;
+  font-size: inherit;
+  letter-spacing: 0 !important;
+}
+
+/* --- Lists get plain markers --- */
+.machine ul { list-style: disc; }
+.machine ol { list-style: decimal; }
+.machine li { color: #c9d1d9; }
+
+/* --- Strong / emphasis --- */
+.machine strong::before,
+.machine strong::after { content: "**"; color: #8b949e; }
+.machine em::before,
+.machine em::after { content: "_"; color: #8b949e; }
+
+.machine strong,
+.machine em {
+  color: #f0f6fc;
+  font-weight: inherit;
+  font-style: inherit;
+}
+
+/* --- Blockquotes get > prefix --- */
+.machine blockquote {
+  border-left: 2px solid #30363d !important;
+  padding-left: 1em;
+  color: #8b949e;
+}
+
+/* --- Code blocks stay as-is (already look terminal) --- */
+.machine code {
+  background: #161b22;
+  color: #c9d1d9;
+  font-size: 13px;
+  border-radius: 0 !important;
+}
+
+/* --- Layout container --- */
+.machine .bg-cream,
+.machine .dark\:bg-night {
+  background: #0d1117 !important;
+}
+
+/* --- Nav / footer text --- */
+.machine nav,
+.machine footer {
+  color: #8b949e;
+}
+
+/* --- Tab bar --- */
+.machine button {
+  font-family: inherit;
+  color: #8b949e;
+}
+
+/* --- Horizontal rules --- */
+.machine hr {
+  border-color: #30363d !important;
+  color: #30363d;
+}
+
+/* --- Tables --- */
+.machine th,
+.machine td {
+  border: 1px solid #30363d;
+  padding: 4px 8px;
+  color: #c9d1d9;
+}
+
+/* --- Hide decorative elements that don't translate to plaintext --- */
+.machine .cmdk-dialog,
+.machine .cmdk-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.machine .cmdk-panel {
+  background: #161b22;
+  border-color: #30363d;
+}
+
+/* --- Sticky header background --- */
+.machine header {
+  background: #0d1117 !important;
+}
+
+/* --- Time elements --- */
+.machine time {
+  color: #8b949e;
+}
+
+/* --- "Coming soon" and other muted text --- */
+.machine .text-gray-400,
+.machine .text-gray-500,
+.machine .dark\:text-gray-500 {
+  color: #484f58 !important;
+}

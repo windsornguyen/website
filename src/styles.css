@@ -3,6 +3,7 @@
 @import "@fontsource-variable/inter";
 @import "tailwindcss";
 @import "./cmdk.css";
+@import "./machine.css";
 
 /*
  * Tailwind content sources — tells the compiler where to scan for

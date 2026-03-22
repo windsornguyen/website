@@ -7,6 +7,7 @@ import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/r
 
 import { CommandMenuProvider } from "@/components/command-menu";
 import Footer from "@/components/footer";
+import { MachineModeProvider, useMachineMode } from "@/components/machine-mode";
 import SiteChrome from "@/components/site-chrome";
 import { ThemeProvider, useTheme } from "@/components/theme-provider";
 import { siteMetadata } from "../content/contentManifest";
@@ -172,13 +173,56 @@ function ThemeToggle() {
   );
 }
 
+function MachineToggle() {
+  const { machine, setMachine } = useMachineMode();
+
+  return (
+    <button
+      type="button"
+      onClick={() => setMachine(!machine)}
+      className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+      aria-label="Toggle machine mode"
+      title={machine ? "Human mode" : "Machine mode"}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {machine ? (
+          <>
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </>
+        ) : (
+          <>
+            <rect x="4" y="4" width="16" height="16" rx="2" />
+            <path d="M9 9h.01" />
+            <path d="M15 9h.01" />
+            <path d="M9 15h6" />
+          </>
+        )}
+      </svg>
+    </button>
+  );
+}
+
 function Nav() {
   return (
     <nav className="mx-auto flex w-full max-w-[60ch] items-center justify-between py-3">
       <Link to="/" className="text-sm font-medium tracking-tight text-gray-900 hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-400">
         Windsor Nguyen
       </Link>
-      <ThemeToggle />
+      <div className="flex items-center gap-0.5">
+        <ThemeToggle />
+        <MachineToggle />
+      </div>
     </nav>
   );
 }
@@ -186,7 +230,8 @@ function Nav() {
 function RootLayout() {
   return (
     <ThemeProvider defaultTheme="system">
-      <CommandMenuProvider>
+      <MachineModeProvider>
+        <CommandMenuProvider>
         <div className="bg-cream flex min-h-screen flex-col px-8 text-gray-900 dark:bg-night dark:text-gray-100">
           <header className="bg-cream sticky top-0 z-10 dark:bg-night">
             <Nav />
@@ -200,7 +245,8 @@ function RootLayout() {
         <Analytics />
         <SpeedInsights />
       </div>
-      </CommandMenuProvider>
+        </CommandMenuProvider>
+      </MachineModeProvider>
     </ThemeProvider>
   );
 }
