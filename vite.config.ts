@@ -35,13 +35,20 @@ export default defineConfig({
   plugins: [
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
     tailwindcss(),
-    {
-      enforce: "pre",
-      ...mdx({
+    (() => {
+      const mdxPlugin = mdx({
         remarkPlugins: [[remarkCodeHike, codeHikeConfig]],
         recmaPlugins: [[recmaCodeHike, codeHikeConfig]],
-      }),
-    },
+      });
+      return {
+        ...mdxPlugin,
+        enforce: "pre",
+        transform(code, id) {
+          if (id.includes("?raw")) return;
+          return (mdxPlugin as any).transform?.call(this, code, id);
+        },
+      };
+    })(),
     tanstackStart({
       prerender: {
         enabled: true,

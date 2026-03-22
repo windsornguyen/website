@@ -1,30 +1,79 @@
 /* Copyright (c) 2026 Windsor Nguyen. MIT License. */
 
 /*
- * Machine mode: terminal aesthetic for the markdown view.
- * The actual content transformation is handled in React
- * (MachineView component), not CSS pseudo-elements.
+ * Machine mode: VT100 terminal aesthetic.
+ * Must override both light and dark mode styles, so uses !important
+ * where Tailwind utilities or dark: variants would otherwise win.
  */
 
-/* --- Terminal aesthetic --- */
+.machine,
 .machine body {
-  font-family: "Menlo", "Monaco", "Courier New", monospace;
+  font-family: "Courier New", "Courier", "Lucida Console", monospace !important;
   font-size: 13px;
   line-height: 1.7;
   letter-spacing: 0 !important;
-  background: #0d1117;
-  color: #c9d1d9;
+  background: var(--color-machine-bg) !important;
+  color: var(--color-machine-fg) !important;
 }
 
-.machine .bg-cream,
-.machine .dark\:bg-night,
-.machine header {
-  background: #0d1117 !important;
+/* --- Override all background containers --- */
+.machine div,
+.machine header,
+.machine main,
+.machine footer,
+.machine nav {
+  background: transparent !important;
+  color: inherit !important;
 }
 
-/* --- Strip decorative styling --- */
+/* --- Machine-mode <pre> should not look like a code block --- */
+.machine .machine-pre {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: var(--color-machine-fg) !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* --- Strip all decorative styling --- */
 .machine * {
   border-radius: 0 !important;
   box-shadow: none !important;
   text-shadow: none !important;
+}
+
+/* --- Links, buttons, text all inherit terminal green --- */
+.machine a,
+.machine button,
+.machine kbd,
+.machine time,
+.machine p,
+.machine span {
+  color: inherit !important;
+  font-family: inherit !important;
+}
+
+/* --- Nav toggle buttons stay visible but muted --- */
+.machine button[aria-label] svg {
+  stroke: var(--color-machine-fg) !important;
+  opacity: 0.6;
+}
+
+.machine button[aria-label]:hover svg {
+  opacity: 1;
+}
+
+/* --- Border color --- */
+.machine * {
+  border-color: var(--color-machine-fg) !important;
+  opacity: 1;
+}
+
+.machine .border-b,
+.machine .border-gray-200,
+.machine .border-gray-800 {
+  border-color: color-mix(in srgb, var(--color-machine-fg) 30%, transparent) !important;
 }

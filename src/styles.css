@@ -24,6 +24,8 @@
   --color-cream-dark: #f0eee6;  /* light hover / code bg */
   --color-night: #0a0a0a;       /* dark bg */
   --color-night-light: #1a1a1a; /* dark hover / code bg */
+  --color-machine-bg: #242923;  /* machine mode bg */
+  --color-machine-fg: #70ce73;  /* machine mode phosphor green */
 }
 
 /* --- Base resets --- */

@@ -18,6 +18,12 @@ Interactive and content elements must never bleed outside the `max-w-[60ch]` con
 column. The outer margin is reserved for future features (sticky notes, comments,
 annotations in blog mode).
 
+## Design Tokens
+
+Never inline raw color values in `className` strings (for example `text-[#33ff33]`).
+Define colors as named tokens in CSS/Tailwind theme config and reference them by
+semantic name so the palette stays coherent and maintainable.
+
 ## Consistency
 
 When renaming a value that serves as both a display label and a runtime discriminant,

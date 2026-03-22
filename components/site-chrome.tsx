@@ -113,7 +113,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
               <li key={post.slug}>
                 <ViewTransitionLink
                   to={`/blog/${post.slug}`}
-                  className="flex items-start justify-between gap-4 rounded-sm px-2 py-2 transition-colors hover:bg-[#101828]/5 dark:hover:bg-white/5"
+                  className="flex items-start justify-between gap-4 rounded-sm px-2 py-2 transition-colors hover:bg-gray-950/5 dark:hover:bg-white/5"
                 >
                   <div className="min-w-0">
                     <div className="text-[15px] font-medium text-gray-900 dark:text-gray-100">{post.title}</div>
