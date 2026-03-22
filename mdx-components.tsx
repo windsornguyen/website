@@ -35,7 +35,7 @@ export const mdxComponents: MDXComponents = {
       {...props}
     />
   ),
-  h4: (props: HeadingProps) => <h4 className="font-medium text-sm" {...props} />,
+  h4: (props: HeadingProps) => <h4 className="text-sm font-medium" {...props} />,
   p: (props: ParagraphProps) => (
     <p
       className="mt-0.5 text-[15px] leading-relaxed text-gray-600"
@@ -55,7 +55,8 @@ export const mdxComponents: MDXComponents = {
     <strong className="font-semibold text-gray-800" {...props} />
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
-    const className = "text-blue-500 hover:text-blue-600";
+    const className =
+      "text-gray-900 underline decoration-gray-300 underline-offset-2 transition-colors hover:decoration-gray-500";
     if (href?.startsWith("/")) {
       return (
         <ViewTransitionLink to={href} className={className} {...props}>

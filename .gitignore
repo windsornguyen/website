@@ -34,3 +34,6 @@ yarn-error.log*
 
 # HTTPS certificates
 certificates/
+
+# lychee cache
+.lycheecache

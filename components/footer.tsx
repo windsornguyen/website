@@ -2,11 +2,11 @@ const Footer = () => {
   const links = [
     { name: "@windsornguyen", url: "https://x.com/windsornguyen" },
     {
-      name: "google scholar",
+      name: "Google Scholar",
       url: "https://scholar.google.com/citations?user=R9DN_W4AAAAJ&hl=en&oi=sra",
     },
-    { name: "linkedin", url: "https://www.linkedin.com/in/windsornguyen" },
-    { name: "github", url: "https://github.com/windsornguyen" },
+    { name: "LinkedIn", url: "https://www.linkedin.com/in/windsornguyen" },
+    { name: "GitHub", url: "https://github.com/windsornguyen" },
   ];
 
   return (

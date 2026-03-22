@@ -13,8 +13,8 @@
     "test": "vp test --run",
     "test:smoke": "node --test tests/site-smoke.smoke.mjs",
     "lint": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#.output\" \"#dist\"",
-    "format": "vp fmt --write \"**/*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc}\" && prettier --write \"**/*.{md,mdx,css}\"",
-    "check-format": "vp fmt --check \"**/*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc}\" && prettier --check \"**/*.{md,mdx,css}\"",
+    "format": "vp fmt --write .",
+    "check-format": "vp fmt --check .",
     "typecheck": "tsgo --noEmit",
     "check": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#.output\" \"#dist\" && pnpm check-format && pnpm typecheck",
     "check:vp": "vp check ."
@@ -49,7 +49,6 @@
     "markdownlint-cli2": "^0.21.0",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
-    "prettier": "^3.8.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.1",

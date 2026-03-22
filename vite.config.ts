@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite-plus";
 
 const codeHikeConfig = {
   components: { code: "Code" },
@@ -21,6 +21,14 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["tests/**/*.test.ts"],
+  },
+  fmt: {
+    printWidth: 100,
+    useTabs: false,
+    trailingComma: "all",
+    endOfLine: "lf",
+    experimentalTailwindcss: {},
+    ignorePatterns: ["src/routeTree.gen.ts"],
   },
   plugins: [
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),

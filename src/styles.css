@@ -1,5 +1,5 @@
-@import '@fontsource-variable/inter';
-@import 'tailwindcss';
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
 
 @source "../components/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../content/**/*.{md,mdx}";
@@ -9,6 +9,9 @@
 @variant dark (&:is(.dark *));
 
 @theme {
+  --color-cream: #faf9f6;
+  --color-cream-dark: #f0eee6;
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
@@ -115,11 +118,11 @@
   }
 
   code {
-    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
     font-size: 14px;
     padding: 0.2em 0.4em;
     border-radius: 0.3em;
-    background-color: var(--color-gray-100);
+    background-color: var(--color-cream-dark);
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
@@ -150,8 +153,8 @@
     color: var(--color-gray-200);
   }
 
-  input[type='text'],
-  input[type='email'] {
+  input[type="text"],
+  input[type="email"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -230,7 +233,7 @@
 
 @layer utilities {
   :root {
-    --font-family-sans: 'Inter Variable', sans-serif;
+    --font-family-sans: "Inter Variable", sans-serif;
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
@@ -304,7 +307,7 @@
 
 @utility blinking-cursor {
   &::after {
-    content: '|';
+    content: "|";
     color: var(--text-secondary-300, #89ddff);
     animation: blink 1s step-start infinite;
   }

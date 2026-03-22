@@ -1,12 +1,26 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import { Command } from "cmdk";
 import { useNavigate } from "@tanstack/react-router";
 
 import { getAllPosts } from "@/src/content/contentManifest";
 
-export default function CommandMenu() {
+type CommandMenuContextValue = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};
+
+const CommandMenuContext = createContext<CommandMenuContextValue>({
+  open: false,
+  setOpen: () => {},
+});
+
+export function useCommandMenu() {
+  return useContext(CommandMenuContext);
+}
+
+export function CommandMenuProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -20,23 +34,45 @@ export default function CommandMenu() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  return (
+    <CommandMenuContext value={{ open, setOpen }}>
+      {children}
+      <CommandMenuDialog open={open} onOpenChange={setOpen} />
+    </CommandMenuContext>
+  );
+}
+
+function CommandMenuDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const navigate = useNavigate();
+  const posts = getAllPosts();
+
   function go(to: string) {
-    setOpen(false);
+    onOpenChange(false);
     void navigate({ to });
   }
 
-  const posts = getAllPosts();
+  const itemClass =
+    "cursor-pointer rounded-lg px-3 py-2 text-[14px] text-gray-700 data-[selected=true]:bg-cream-dark data-[selected=true]:text-gray-900";
+
+  const groupHeadingClass =
+    "[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-gray-400";
 
   return (
     <Command.Dialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={onOpenChange}
       label="Command menu"
       className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh]"
     >
-      <div className="fixed inset-0 bg-black/40" onClick={() => setOpen(false)} />
+      <div className="fixed inset-0 bg-black/40" onClick={() => onOpenChange(false)} />
 
-      <div className="relative w-full max-w-[480px] rounded-xl border border-gray-200 bg-white shadow-2xl">
+      <div className="bg-cream relative w-full max-w-[480px] rounded-xl border border-gray-200 shadow-2xl">
         <Command.Input
           placeholder="Search..."
           className="w-full border-b border-gray-100 bg-transparent px-4 py-3 text-[15px] text-gray-900 outline-none placeholder:text-gray-400"
@@ -47,28 +83,19 @@ export default function CommandMenu() {
             No results.
           </Command.Empty>
 
-          <Command.Group
-            heading="Pages"
-            className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-gray-400"
-          >
-            <Command.Item
-              onSelect={() => go("/")}
-              className="cursor-pointer rounded-lg px-3 py-2 text-[14px] text-gray-700 data-[selected=true]:bg-gray-100 data-[selected=true]:text-gray-900"
-            >
+          <Command.Group heading="Pages" className={groupHeadingClass}>
+            <Command.Item onSelect={() => go("/")} className={itemClass}>
               Home
             </Command.Item>
           </Command.Group>
 
-          <Command.Group
-            heading="Writing"
-            className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-gray-400"
-          >
+          <Command.Group heading="Writing" className={groupHeadingClass}>
             {posts.map((post) => (
               <Command.Item
                 key={post.slug}
                 value={`${post.title} ${post.description}`}
                 onSelect={() => go(`/blog/${post.slug}`)}
-                className="cursor-pointer rounded-lg px-3 py-2 text-[14px] text-gray-700 data-[selected=true]:bg-gray-100 data-[selected=true]:text-gray-900"
+                className={itemClass}
               >
                 <div className="font-medium">{post.title}</div>
                 <div className="text-[12px] text-gray-400">{post.description}</div>
@@ -76,27 +103,22 @@ export default function CommandMenu() {
             ))}
           </Command.Group>
 
-          <Command.Group
-            heading="Links"
-            className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-gray-400"
-          >
+          <Command.Group heading="Links" className={groupHeadingClass}>
             <Command.Item
               onSelect={() => window.open("https://github.com/windsornguyen", "_blank")}
-              className="cursor-pointer rounded-lg px-3 py-2 text-[14px] text-gray-700 data-[selected=true]:bg-gray-100 data-[selected=true]:text-gray-900"
+              className={itemClass}
             >
               GitHub
             </Command.Item>
             <Command.Item
               onSelect={() => window.open("https://x.com/windsornguyen", "_blank")}
-              className="cursor-pointer rounded-lg px-3 py-2 text-[14px] text-gray-700 data-[selected=true]:bg-gray-100 data-[selected=true]:text-gray-900"
+              className={itemClass}
             >
               Twitter / X
             </Command.Item>
             <Command.Item
-              onSelect={() =>
-                window.open("https://www.linkedin.com/in/windsornguyen", "_blank")
-              }
-              className="cursor-pointer rounded-lg px-3 py-2 text-[14px] text-gray-700 data-[selected=true]:bg-gray-100 data-[selected=true]:text-gray-900"
+              onSelect={() => window.open("https://www.linkedin.com/in/windsornguyen", "_blank")}
+              className={itemClass}
             >
               LinkedIn
             </Command.Item>
@@ -104,8 +126,8 @@ export default function CommandMenu() {
         </Command.List>
 
         <div className="border-t border-gray-100 px-4 py-2 text-[11px] text-gray-400">
-          <kbd className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[10px]">esc</kbd>
-          {" "}to close
+          <kbd className="bg-cream-dark rounded px-1.5 py-0.5 font-mono text-[10px]">esc</kbd> to
+          close
         </div>
       </div>
     </Command.Dialog>

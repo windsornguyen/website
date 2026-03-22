@@ -90,9 +90,6 @@ importers:
       oxlint:
         specifier: ^1.56.0
         version: 1.56.0(oxlint-tsgolint@0.17.1)
-      prettier:
-        specifier: ^3.8.1
-        version: 3.8.1
       tsx:
         specifier: ^4.21.0
         version: 4.21.0

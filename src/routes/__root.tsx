@@ -3,7 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
 
-import CommandMenu from "@/components/command-menu";
+import { CommandMenuProvider, useCommandMenu } from "@/components/command-menu";
 import Footer from "@/components/footer";
 import { siteMetadata } from "../content/contentManifest";
 
@@ -109,21 +109,35 @@ function RootComponent() {
 }
 
 function Nav() {
+  const { setOpen } = useCommandMenu();
+
   return (
-    <nav className="mx-auto flex w-full max-w-[60ch] items-center justify-between py-5">
-      <Link
-        to="/"
-        className="text-sm font-medium tracking-tight text-gray-900 hover:text-gray-600"
-      >
-        windsor nguyen
+    <nav className="mx-auto flex w-full max-w-[60ch] items-center justify-between py-3">
+      <Link to="/" className="text-sm font-medium tracking-tight text-gray-900 hover:text-gray-600">
+        Windsor Nguyen
       </Link>
-      <div className="flex gap-5 text-[13px] text-gray-400">
-        <Link to="/" className="hover:text-gray-900">
-          home
-        </Link>
-        <a href="#blog" className="hover:text-gray-900">
-          blog
-        </a>
+      <div className="flex items-center text-[13px] text-gray-400">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="bg-cream flex items-center gap-1.5 rounded-md border border-gray-200 px-2 py-1 text-[12px] text-gray-400 transition-colors hover:border-gray-300 hover:text-gray-600"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <kbd className="font-mono">⌘K</kbd>
+        </button>
       </div>
     </nav>
   );
@@ -131,16 +145,17 @@ function Nav() {
 
 function RootLayout() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAF9F5] px-8 text-gray-900">
-      <Nav />
-      <main className="mx-auto w-full max-w-[60ch] flex-1 pt-6">
-        <Outlet />
-      </main>
-      <Footer />
-      <CommandMenu />
-      <Analytics />
-      <SpeedInsights />
-    </div>
+    <CommandMenuProvider>
+      <div className="bg-cream flex min-h-screen flex-col px-8 text-gray-900">
+        <Nav />
+        <main className="mx-auto w-full max-w-[60ch] flex-1 pt-1">
+          <Outlet />
+        </main>
+        <Footer />
+        <Analytics />
+        <SpeedInsights />
+      </div>
+    </CommandMenuProvider>
   );
 }
 
@@ -150,7 +165,7 @@ function NotFoundPage() {
       <h1 className="text-2xl font-medium text-gray-900">404</h1>
       <p className="leading-snug text-gray-800">This page does not exist.</p>
       <Link className="text-blue-500 hover:text-blue-700" to="/">
-        Go home
+        Go Home
       </Link>
     </main>
   );
