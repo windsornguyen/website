@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
@@ -35,6 +37,11 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = document.documentElement;
+
+    const css = document.createElement("style");
+    css.textContent = "*, *::before, *::after { transition: none !important; }";
+    document.head.appendChild(css);
+
     root.classList.remove("light", "dark");
 
     const resolved =
@@ -45,6 +52,11 @@ export function ThemeProvider({
         : theme;
 
     root.classList.add(resolved);
+
+    // Force a reflow so the browser applies the no-transition override
+    // before we remove it, ensuring zero animation frames leak through.
+    void document.body.offsetHeight;
+    document.head.removeChild(css);
   }, [theme]);
 
   function setTheme(next: Theme) {

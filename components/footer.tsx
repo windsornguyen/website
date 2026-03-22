@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 const Footer = () => {
   const links = [
     { name: "@windsornguyen", url: "https://x.com/windsornguyen" },

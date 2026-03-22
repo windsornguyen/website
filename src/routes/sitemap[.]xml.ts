@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { createFileRoute } from "@tanstack/react-router";
 
 import { getAllPosts, siteMetadata } from "../content/contentManifest";

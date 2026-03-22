@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vp build",
+    "build": "tsx scripts/generate-llms.ts && vp build",
+    "llms": "tsx scripts/generate-llms.ts",
     "preview": "vp preview",
     "routegen": "tsr generate",
     "routewatch": "tsr watch",

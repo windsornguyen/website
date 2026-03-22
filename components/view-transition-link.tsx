@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import type { AnchorHTMLAttributes, MouseEvent, ReactNode } from "react";
 
 import { useNavigate } from "@tanstack/react-router";

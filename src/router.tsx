@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 
 import { routeTree } from "./routeTree.gen";

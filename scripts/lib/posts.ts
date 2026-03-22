@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 

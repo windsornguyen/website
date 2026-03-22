@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { highlight } from "sugar-high";
@@ -56,7 +58,7 @@ export const mdxComponents: MDXComponents = {
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
     const className =
-      "text-gray-900 underline decoration-gray-300 underline-offset-2 transition-colors hover:decoration-gray-500 dark:text-gray-100 dark:decoration-gray-600 dark:hover:decoration-gray-400";
+      "underline decoration-gray-400 underline-offset-2 transition-colors hover:decoration-gray-600 dark:decoration-gray-500 dark:hover:decoration-gray-300";
     if (href?.startsWith("/")) {
       return (
         <ViewTransitionLink to={href} className={className} {...props}>

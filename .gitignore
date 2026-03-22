@@ -37,3 +37,8 @@ certificates/
 
 # lychee cache
 .lycheecache
+
+# generated llms.txt files (build artifact)
+public/llms.txt
+public/llms-full.txt
+public/blog/*.md

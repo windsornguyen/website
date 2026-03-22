@@ -1,3 +1,5 @@
+/* Copyright (c) 2026 Windsor Nguyen. MIT License. */
+
 @import "@fontsource-variable/inter";
 @import "tailwindcss";
 @import "./cmdk.css";
@@ -58,12 +60,19 @@
     cursor: pointer;
   }
 
-  /* --- Prevent orphaned words on heading lines --- */
+  /* --- Prevent orphaned words on headings --- */
   h1,
   h2,
   h3,
   h4 {
     text-wrap: balance;
+  }
+
+  /* --- Distribute line breaks evenly in prose --- */
+  p,
+  li,
+  blockquote {
+    text-wrap: pretty;
   }
 
   /* --- Fenced code blocks (dark bg, hidden scrollbar) --- */

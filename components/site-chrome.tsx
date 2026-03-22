@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { useLocation } from "@tanstack/react-router";
@@ -18,7 +20,7 @@ function formatDate(iso: string) {
 }
 
 const linkClass =
-  "text-gray-900 underline decoration-gray-300 underline-offset-2 transition-colors hover:decoration-gray-500 dark:text-gray-100 dark:decoration-gray-600 dark:hover:decoration-gray-400";
+  "underline decoration-gray-400 underline-offset-2 transition-colors hover:decoration-gray-600 dark:decoration-gray-500 dark:hover:decoration-gray-300";
 
 function SearchButton() {
   const { setOpen } = useCommandMenu();
@@ -27,7 +29,7 @@ function SearchButton() {
     <button
       type="button"
       onClick={() => setOpen(true)}
-      className="mb-px flex h-7 items-center gap-3 rounded-md border border-gray-200 bg-white/60 px-2.5 text-[11px] text-gray-400 transition-colors hover:border-gray-300 hover:text-gray-500 dark:border-gray-700 dark:bg-white/5 dark:text-gray-500 dark:hover:border-gray-600 dark:hover:text-gray-400"
+      className="mb-1 flex h-6 min-w-20 shrink-0 items-center justify-between rounded-md border border-gray-200/80 px-2 text-[11px] text-gray-300 transition-colors hover:border-gray-300 hover:text-gray-400 sm:w-28 dark:border-gray-700/60 dark:text-gray-600 dark:hover:border-gray-600 dark:hover:text-gray-500"
       aria-label="Search"
     >
       <kbd className="font-sans font-medium tracking-normal">⌘ K</kbd>
@@ -126,9 +128,9 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
           </ul>
         )}
 
-        {activeTab === "Research" && <p className="text-[13px] text-gray-400 dark:text-gray-500">Coming soon.</p>}
+        {activeTab === "Research" && <p className="py-12 text-center text-[13px] text-gray-400 dark:text-gray-500">Coming soon.</p>}
 
-        {activeTab === "Projects" && <p className="text-[13px] text-gray-400 dark:text-gray-500">Coming soon.</p>}
+        {activeTab === "Projects" && <p className="py-12 text-center text-[13px] text-gray-400 dark:text-gray-500">Coming soon.</p>}
 
         {activeTab === "Bio" && (
           <div

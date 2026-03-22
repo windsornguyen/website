@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { recmaCodeHike, remarkCodeHike } from "codehike/mdx";
 import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";

@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import type { MDXComponents } from "mdx/types";
 import type { ComponentType } from "react";
 

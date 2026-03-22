@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Command } from "cmdk";

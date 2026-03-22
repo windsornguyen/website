@@ -1,3 +1,5 @@
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
+
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { mdxComponents } from "@/mdx-components";

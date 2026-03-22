@@ -1,4 +1,5 @@
 #!/usr/bin/env -S tsx
+// Copyright (c) 2026 Windsor Nguyen. MIT License.
 
 import { cac } from "cac";
 
