@@ -14,6 +14,9 @@ type ListItemProps = ComponentPropsWithoutRef<"li">;
 type AnchorProps = ComponentPropsWithoutRef<"a">;
 type BlockquoteProps = ComponentPropsWithoutRef<"blockquote">;
 
+const linkClass =
+  "underline decoration-link-line underline-offset-2 transition-colors hover:decoration-link-line-hover";
+
 export const mdxComponents: MDXComponents = {
   Code,
   h1: (props: HeadingProps) => (
@@ -25,14 +28,14 @@ export const mdxComponents: MDXComponents = {
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="mt-5 mb-1 text-base font-medium text-gray-800 dark:text-gray-200"
+      className="mt-5 mb-1 text-base font-medium text-fg-emphasis"
       style={{ letterSpacing: "-0.02em" }}
       {...props}
     />
   ),
   h3: (props: HeadingProps) => (
     <h3
-      className="mt-4 mb-1 text-sm font-medium text-gray-800 dark:text-gray-200"
+      className="mt-4 mb-1 text-sm font-medium text-fg-emphasis"
       style={{ letterSpacing: "-0.01em" }}
       {...props}
     />
@@ -40,41 +43,39 @@ export const mdxComponents: MDXComponents = {
   h4: (props: HeadingProps) => <h4 className="text-sm font-medium" {...props} />,
   p: (props: ParagraphProps) => (
     <p
-      className="mt-0.5 text-[15px] leading-relaxed text-gray-600 dark:text-gray-400"
+      className="mt-0.5 text-[15px] leading-relaxed text-fg-secondary"
       style={{ letterSpacing: "-0.011em" }}
       {...props}
     />
   ),
   ol: (props: ListProps) => (
-    <ol className="list-decimal space-y-0.5 pl-5 text-[15px] text-gray-600 dark:text-gray-400" {...props} />
+    <ol className="list-decimal space-y-0.5 pl-5 text-[15px] text-fg-secondary" {...props} />
   ),
   ul: (props: ListProps) => (
-    <ul className="list-disc space-y-0.5 pl-5 text-[15px] text-gray-600 dark:text-gray-400" {...props} />
+    <ul className="list-disc space-y-0.5 pl-5 text-[15px] text-fg-secondary" {...props} />
   ),
   li: (props: ListItemProps) => <li className="pl-0.5" {...props} />,
   em: (props: ComponentPropsWithoutRef<"em">) => <em className="font-medium" {...props} />,
   strong: (props: ComponentPropsWithoutRef<"strong">) => (
-    <strong className="font-semibold text-gray-800 dark:text-gray-200" {...props} />
+    <strong className="font-semibold text-fg-emphasis" {...props} />
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
-    const className =
-      "underline decoration-gray-400 underline-offset-2 transition-colors hover:decoration-gray-600 dark:decoration-gray-500 dark:hover:decoration-gray-300";
     if (href?.startsWith("/")) {
       return (
-        <ViewTransitionLink to={href} className={className} {...props}>
+        <ViewTransitionLink to={href} className={linkClass} {...props}>
           {children}
         </ViewTransitionLink>
       );
     }
     if (href?.startsWith("#")) {
       return (
-        <a href={href} className={className} {...props}>
+        <a href={href} className={linkClass} {...props}>
           {children}
         </a>
       );
     }
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={className} {...props}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={linkClass} {...props}>
         {children}
       </a>
     );
@@ -104,6 +105,6 @@ export const mdxComponents: MDXComponents = {
     </table>
   ),
   blockquote: (props: BlockquoteProps) => (
-    <blockquote className="ml-[0.075em] border-l-2 border-gray-200 pl-4 text-gray-500 dark:border-gray-700 dark:text-gray-400" {...props} />
+    <blockquote className="ml-[0.075em] border-l-2 border-edge pl-4 text-fg-muted" {...props} />
   ),
 };

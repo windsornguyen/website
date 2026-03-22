@@ -24,6 +24,12 @@ Never inline raw color values in `className` strings (for example `text-[#33ff33
 Define colors as named tokens in CSS/Tailwind theme config and reference them by
 semantic name so the palette stays coherent and maintainable.
 
+## CSS Specificity
+
+Never use `!important`. If you need it, the architecture is wrong. Theme modes
+(dark, machine) work by overriding CSS custom properties, not by brute-forcing
+specificity. Scope style changes to targeted selectors, not `*` wildcards.
+
 ## Consistency
 
 When renaming a value that serves as both a display label and a runtime discriminant,
