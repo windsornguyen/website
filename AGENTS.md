@@ -12,6 +12,12 @@
 All non-blog UI text uses standard English capitalization. Blog titles and body text
 stay exactly as authored.
 
+## Layout Boundaries
+
+Interactive and content elements must never bleed outside the `max-w-[60ch]` content
+column. The outer margin is reserved for future features (sticky notes, comments,
+annotations in blog mode).
+
 ## Consistency
 
 When renaming a value that serves as both a display label and a runtime discriminant,

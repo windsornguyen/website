@@ -102,21 +102,19 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
         <SearchButton />
       </div>
 
-      <div className="pt-4">
+      <div className="pt-1">
         {showRoute && children}
 
         {activeTab === "Writing" && !onBlogPost && (
-          <ul className="space-y-3">
+          <ul className="space-y-0">
             {posts.map((post) => (
               <li key={post.slug}>
                 <ViewTransitionLink
                   to={`/blog/${post.slug}`}
-                  className="group flex items-start justify-between gap-4"
+                  className="flex items-start justify-between gap-4 rounded-sm px-2 py-2 transition-colors hover:bg-[#101828]/5"
                 >
                   <div className="min-w-0">
-                    <div className="text-[15px] font-medium text-gray-900 group-hover:text-blue-600">
-                      {post.title}
-                    </div>
+                    <div className="text-[15px] font-medium text-gray-900">{post.title}</div>
                     <div className="text-[13px] leading-snug text-gray-400">{post.description}</div>
                   </div>
                   <time className="shrink-0 pt-0.5 text-[13px] text-gray-400 tabular-nums">
