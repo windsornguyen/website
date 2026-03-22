@@ -35,7 +35,6 @@ describe("posts cli helpers", () => {
       publishedAt: "2026-03-21T00:00:00.000Z",
     });
 
-    expect(template).toContain('import AnimatedName from "@/components/animated-name";');
     expect(template).toContain("# new post");
     expect(template).toContain('canonical: "/blog/new-post"');
   });

@@ -1,7 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { mdxComponents } from "@/mdx-components";
-import HomePage from "../../content/home.mdx";
 import { siteMetadata } from "../content/contentManifest";
 
 export const Route = createFileRoute("/")({
@@ -22,9 +20,5 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  component: HomeRoute,
+  component: () => null,
 });
-
-function HomeRoute() {
-  return <HomePage components={mdxComponents} />;
-}

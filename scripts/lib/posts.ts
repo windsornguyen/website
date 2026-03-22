@@ -56,9 +56,7 @@ export function renderTimestampLabel(isoTimestamp: string) {
 }
 
 export function renderPostTemplate(metadata: BlogPostMetadata) {
-  return `import AnimatedName from "@/components/animated-name";
-
-export const postMetadata = {
+  return `export const postMetadata = {
   slug: "${metadata.slug}",
   title: "${metadata.title}",
   description: "${metadata.description}",
@@ -68,9 +66,6 @@ export const postMetadata = {
 
 # ${metadata.title}
 
-<AnimatedName />
-
-<br />
 <small>
   <em>Last updated: ${renderTimestampLabel(metadata.publishedAt)}.</em>
 </small>

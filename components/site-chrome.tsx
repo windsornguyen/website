@@ -1,5 +1,8 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
+import { useLocation } from "@tanstack/react-router";
 
+import { useCommandMenu } from "@/components/command-menu";
 import ViewTransitionLink from "@/components/view-transition-link";
 import { getAllPosts } from "@/src/content/contentManifest";
 
@@ -17,31 +20,92 @@ function formatDate(iso: string) {
 const linkClass =
   "text-gray-900 underline decoration-gray-300 underline-offset-2 transition-colors hover:decoration-gray-500";
 
-export default function HomeTabs() {
+function SearchButton() {
+  const { setOpen } = useCommandMenu();
+
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen(true)}
+      className="mb-px flex h-7 items-center gap-3 rounded-md border border-gray-200 bg-white/60 px-2.5 text-[11px] text-gray-400 transition-colors hover:border-gray-300 hover:text-gray-500"
+      aria-label="Search"
+    >
+      <kbd className="font-sans font-medium tracking-normal">⌘ K</kbd>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+    </button>
+  );
+}
+
+export default function SiteChrome({ children }: { children: ReactNode }) {
+  const location = useLocation();
+  const onBlogPost = location.pathname.startsWith("/blog/");
   const [activeTab, setActiveTab] = useState<Tab>("Writing");
   const posts = getAllPosts();
 
+  const showRoute = activeTab === "Writing" && onBlogPost;
+
+  function handleTabClick(tab: Tab) {
+    setActiveTab(tab);
+    if (tab === "Writing" && onBlogPost) {
+      // Stay on the blog post — just switch tab highlight
+    }
+  }
+
   return (
-    <div className="mt-4">
-      <div className="flex gap-0 border-b border-gray-200">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => setActiveTab(tab)}
-            className={`px-3 py-1.5 text-[13px] font-medium transition-colors ${
-              activeTab === tab
-                ? "border-b-2 border-gray-900 text-gray-900"
-                : "text-gray-400 hover:text-gray-600"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
+    <>
+      <p
+        className="mt-0.5 text-[15px] leading-relaxed text-gray-600"
+        style={{ letterSpacing: "-0.011em" }}
+      >
+        Co-Founder and CTO of{" "}
+        <a
+          href="https://dedaluslabs.ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={linkClass}
+        >
+          Dedalus Labs
+        </a>
+        .
+      </p>
+
+      <div className="mt-4 flex items-center justify-between border-b border-gray-200">
+        <div className="flex gap-0">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => handleTabClick(tab)}
+              className={`px-3 py-1.5 text-[13px] font-medium transition-colors ${
+                activeTab === tab
+                  ? "border-b-2 border-gray-900 text-gray-900"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+        <SearchButton />
       </div>
 
       <div className="pt-4">
-        {activeTab === "Writing" && (
+        {showRoute && children}
+
+        {activeTab === "Writing" && !onBlogPost && (
           <ul className="space-y-3">
             {posts.map((post) => (
               <li key={post.slug}>
@@ -118,6 +182,6 @@ export default function HomeTabs() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
