@@ -48,8 +48,6 @@ function HomeRoute() {
         <HomePage components={mdxComponents} />
       </section>
 
-      <hr className="border-gray-200" />
-
       <div>
         <div className="flex gap-0 border-b border-gray-200">
           {tabs.map((tab) => (
@@ -70,20 +68,22 @@ function HomeRoute() {
 
         <div className="pt-4">
           {activeTab === "writing" && (
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {posts.map((post) => (
                 <li key={post.slug}>
                   <ViewTransitionLink
                     to={`/blog/${post.slug}`}
-                    className="group flex items-baseline justify-between gap-3"
+                    className="group flex items-start justify-between gap-4"
                   >
                     <div className="min-w-0">
-                      <span className="text-[15px] font-medium text-gray-900 group-hover:text-blue-600">
+                      <div className="text-[15px] font-medium text-gray-900 group-hover:text-blue-600">
                         {post.title}
-                      </span>
-                      <span className="ml-2 text-[13px] text-gray-400">{post.description}</span>
+                      </div>
+                      <div className="text-[13px] leading-snug text-gray-400">
+                        {post.description}
+                      </div>
                     </div>
-                    <time className="shrink-0 text-[13px] tabular-nums text-gray-400">
+                    <time className="shrink-0 pt-0.5 text-[13px] tabular-nums text-gray-400">
                       {formatDate(post.publishedAt)}
                     </time>
                   </ViewTransitionLink>
