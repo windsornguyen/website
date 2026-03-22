@@ -26,6 +26,7 @@
     "@tanstack/react-start": "^1.167.2",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
+    "cmdk": "^1.1.1",
     "codehike": "^1.1.0",
     "nitro": "npm:nitro-nightly@3.0.1-20260320-182900-2218d454",
     "react": "^19.2.4",

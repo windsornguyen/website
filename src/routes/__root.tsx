@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
 
+import CommandMenu from "@/components/command-menu";
 import Footer from "@/components/footer";
 import { siteMetadata } from "../content/contentManifest";
 
@@ -136,6 +137,7 @@ function RootLayout() {
         <Outlet />
       </main>
       <Footer />
+      <CommandMenu />
       <Analytics />
       <SpeedInsights />
     </div>
