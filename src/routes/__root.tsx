@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { HeadContent, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
+import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
 
 import Footer from "@/components/footer";
 import { siteMetadata } from "../content/contentManifest";
@@ -94,14 +95,44 @@ export const Route = createRootRoute({
       },
     ],
   }),
-  shellComponent: RootDocument,
-  component: RootLayout,
+  component: RootComponent,
+  notFoundComponent: NotFoundPage,
 });
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <RootLayout />
+    </RootDocument>
+  );
+}
+
+function Nav() {
+  return (
+    <nav className="mx-auto flex w-full max-w-[60ch] items-center justify-between py-5">
+      <Link
+        to="/"
+        className="text-sm font-medium tracking-tight text-gray-900 hover:text-gray-600"
+      >
+        windsor nguyen
+      </Link>
+      <div className="flex gap-5 text-[13px] text-gray-400">
+        <Link to="/" className="hover:text-gray-900">
+          home
+        </Link>
+        <a href="#blog" className="hover:text-gray-900">
+          blog
+        </a>
+      </div>
+    </nav>
+  );
+}
 
 function RootLayout() {
   return (
-    <div className="flex min-h-screen flex-col justify-between bg-white p-8 pt-0 text-gray-900 md:pt-8">
-      <main className="mx-auto w-full max-w-[60ch] space-y-6">
+    <div className="flex min-h-screen flex-col bg-[#FAF9F5] px-8 text-gray-900">
+      <Nav />
+      <main className="mx-auto w-full max-w-[60ch] flex-1 pt-6">
         <Outlet />
       </main>
       <Footer />
@@ -111,14 +142,26 @@ function RootLayout() {
   );
 }
 
-function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
+function NotFoundPage() {
+  return (
+    <main className="space-y-4 pt-12">
+      <h1 className="text-2xl font-medium text-gray-900">404</h1>
+      <p className="leading-snug text-gray-800">This page does not exist.</p>
+      <Link className="text-blue-500 hover:text-blue-700" to="/">
+        Go home
+      </Link>
+    </main>
+  );
+}
+
+function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
       <head>
         {gaId ? <GoogleAnalyticsScripts gaId={gaId} /> : null}
         <HeadContent />
       </head>
-      <body className="tracking-tight antialiased">
+      <body className="antialiased" style={{ letterSpacing: "-0.011em" }}>
         {children}
         <Scripts />
       </body>
