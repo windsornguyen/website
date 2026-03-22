@@ -8,6 +8,7 @@ import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/r
 import { CommandMenuProvider } from "@/components/command-menu";
 import Footer from "@/components/footer";
 import { MachineModeProvider, useMachineMode } from "@/components/machine-mode";
+import MachineView from "@/components/machine-view";
 import SiteChrome from "@/components/site-chrome";
 import { ThemeProvider, useTheme } from "@/components/theme-provider";
 import { siteMetadata } from "../content/contentManifest";
@@ -232,22 +233,34 @@ function RootLayout() {
     <ThemeProvider defaultTheme="system">
       <MachineModeProvider>
         <CommandMenuProvider>
-        <div className="bg-cream flex min-h-screen flex-col px-8 text-gray-900 dark:bg-night dark:text-gray-100">
-          <header className="bg-cream sticky top-0 z-10 dark:bg-night">
-            <Nav />
-          </header>
-        <main className="mx-auto w-full max-w-[60ch] flex-1 pt-1">
-          <SiteChrome>
-            <Outlet />
-          </SiteChrome>
-        </main>
-        <Footer />
-        <Analytics />
-        <SpeedInsights />
-      </div>
+          <LayoutShell />
         </CommandMenuProvider>
       </MachineModeProvider>
     </ThemeProvider>
+  );
+}
+
+function LayoutShell() {
+  const { machine } = useMachineMode();
+
+  return (
+    <div className="bg-cream flex min-h-screen flex-col px-8 text-gray-900 dark:bg-night dark:text-gray-100">
+      <header className="bg-cream sticky top-0 z-10 dark:bg-night">
+        <Nav />
+      </header>
+      <main className="mx-auto w-full max-w-[60ch] flex-1 pt-1">
+        {machine ? (
+          <MachineView />
+        ) : (
+          <SiteChrome>
+            <Outlet />
+          </SiteChrome>
+        )}
+      </main>
+      {!machine && <Footer />}
+      <Analytics />
+      <SpeedInsights />
+    </div>
   );
 }
 

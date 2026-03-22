@@ -22,14 +22,17 @@ type BlogPostModule = {
 
 export type BlogPostEntry = ResolvedPostMetadata & {
   Component: MdxPageComponent;
+  rawSource: string;
 };
 
 const blogModules = import.meta.glob<BlogPostModule>("../../content/blog/*.mdx", { eager: true });
+const blogSources = import.meta.glob("../../content/blog/*.mdx", { eager: true, query: "?raw", import: "default" }) as Record<string, string>;
 
-const blogPosts = Object.values(blogModules)
-  .map(({ default: Component, postMetadata }) => ({
+const blogPosts = Object.entries(blogModules)
+  .map(([filepath, { default: Component, postMetadata }]) => ({
     ...postMetadata,
     Component,
+    rawSource: blogSources[filepath] ?? "",
   }))
   .filter((post) => post.status === "published")
   .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
