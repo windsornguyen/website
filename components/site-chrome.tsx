@@ -45,11 +45,20 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
   const location = useLocation();
   const onBlogPost = location.pathname.startsWith("/blog/");
   const [activeTab, setActiveTab] = useState<Tab>("Writing");
+  const [enterDirection, setEnterDirection] = useState<"from-left" | "from-right" | "fade">("fade");
   const posts = getAllPosts();
 
   const showRoute = activeTab === "Writing" && onBlogPost;
 
   function handleTabClick(tab: Tab) {
+    const currentIndex = tabs.indexOf(activeTab);
+    const nextIndex = tabs.indexOf(tab);
+
+    if (nextIndex === currentIndex) {
+      return;
+    }
+
+    setEnterDirection(nextIndex > currentIndex ? "from-left" : "from-right");
     setActiveTab(tab);
   }
 
@@ -86,7 +95,16 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
         <SearchButton />
       </div>
 
-      <div className="pt-2.5">
+      <div
+        key={activeTab}
+        className={`pt-2.5 ${
+          enterDirection === "from-left"
+            ? "animate-tab-in-from-left"
+            : enterDirection === "from-right"
+              ? "animate-tab-in-from-right"
+              : "animate-tab-in"
+        }`}
+      >
         {showRoute && children}
 
         {activeTab === "Writing" && !onBlogPost && (
