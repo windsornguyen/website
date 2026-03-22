@@ -65,7 +65,8 @@ export function buildPostMachineMarkdown(
     throw new Error(`Missing rawSource for published post "${post.slug}"`);
   }
 
-  const prose = stripPreamble(post.rawSource);
+  const stripped = stripPreamble(post.rawSource);
+  const prose = stripped.replace(/^#\s+.*\n*/, "");
 
   return [
     `# ${post.title}`,

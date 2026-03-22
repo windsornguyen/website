@@ -7,6 +7,7 @@ import { useLocation } from "@tanstack/react-router";
 import { useCommandMenu } from "@/components/command-menu";
 import ViewTransitionLink from "@/components/view-transition-link";
 import { getAllPosts } from "@/src/content/contentManifest";
+import { formatViewCount, getViewCount } from "@/src/lib/views";
 
 const tabs = ["Writing", "Research", "Projects", "Bio"] as const;
 type Tab = (typeof tabs)[number];
@@ -29,7 +30,7 @@ function SearchButton() {
     <button
       type="button"
       onClick={() => setOpen(true)}
-      className="mb-1 flex h-6 min-w-20 shrink-0 items-center justify-between rounded-md border border-edge px-2 text-[11px] text-fg-ghost transition-colors hover:border-fg-muted hover:text-fg-muted sm:w-28"
+      className="mb-1 flex h-6 min-w-20 shrink-0 items-center justify-between rounded-md border border-edge px-2 text-caption text-fg-ghost transition-colors hover:border-fg-muted hover:text-fg-muted sm:w-28"
       aria-label="Search"
     >
       <kbd className="font-sans font-medium tracking-normal">⌘ K</kbd>
@@ -65,7 +66,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
   return (
     <>
       <p
-        className="mt-0.5 text-[15px] leading-relaxed text-fg-secondary"
+        className="mt-0.5 text-body leading-relaxed text-fg-secondary"
         style={{ letterSpacing: "-0.011em" }}
       >
         Co-Founder and CTO of{" "}
@@ -82,7 +83,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
               key={tab}
               type="button"
               onClick={() => handleTabClick(tab)}
-              className={`px-3 py-1.5 text-[13px] font-medium transition-colors ${
+              className={`px-3 py-1.5 text-label font-medium transition-colors ${
                 activeTab === tab
                   ? "border-b-2 border-fg text-fg"
                   : "text-fg-muted hover:text-fg-secondary"
@@ -116,25 +117,26 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
                   className="flex items-start justify-between gap-4 rounded-sm px-2 py-2 transition-colors hover:bg-surface-active"
                 >
                   <div className="min-w-0">
-                    <div className="text-[15px] font-medium text-fg">{post.title}</div>
-                    <div className="text-[13px] leading-snug text-fg-muted">{post.description}</div>
+                    <div className="text-body font-medium text-fg">{post.title}</div>
+                    <div className="text-label leading-snug text-fg-muted">{post.description}</div>
                   </div>
-                  <time className="shrink-0 pt-0.5 text-[13px] text-fg-muted tabular-nums">
-                    {formatDate(post.publishedAt)}
-                  </time>
+                  <div className="flex shrink-0 flex-col items-end gap-0.5 pt-0.5 text-label text-fg-muted tabular-nums">
+                    <time>{formatDate(post.publishedAt)}</time>
+                    <span className="text-caption">{formatViewCount(getViewCount(post.slug))}</span>
+                  </div>
                 </ViewTransitionLink>
               </li>
             ))}
           </ul>
         )}
 
-        {activeTab === "Research" && <p className="py-12 text-center text-[13px] text-fg-muted">Coming soon.</p>}
+        {activeTab === "Research" && <p className="py-12 text-center text-label text-fg-muted">Coming soon.</p>}
 
-        {activeTab === "Projects" && <p className="py-12 text-center text-[13px] text-fg-muted">Coming soon.</p>}
+        {activeTab === "Projects" && <p className="py-12 text-center text-label text-fg-muted">Coming soon.</p>}
 
         {activeTab === "Bio" && (
           <div
-            className="space-y-1 text-[15px] leading-relaxed text-fg-secondary"
+            className="space-y-1 text-body leading-relaxed text-fg-secondary"
             style={{ letterSpacing: "-0.011em" }}
           >
             <p>

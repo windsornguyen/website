@@ -34,6 +34,9 @@
   --color-link-line-hover: var(--link-line-hover);
   --color-machine-bg: #242923;
   --color-machine-fg: #70ce73;
+  --text-caption: 11px;
+  --text-label: 13px;
+  --text-body: 15px;
   --animate-tab-in: tab-in 0.15s ease-out;
   --animate-tab-in-from-left: tab-in-from-left 0.15s ease-out;
   --animate-tab-in-from-right: tab-in-from-right 0.15s ease-out;

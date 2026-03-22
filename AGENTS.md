@@ -20,9 +20,9 @@ annotations in blog mode).
 
 ## Design Tokens
 
-Never inline raw color values in `className` strings (for example `text-[#33ff33]`).
-Define colors as named tokens in CSS/Tailwind theme config and reference them by
-semantic name so the palette stays coherent and maintainable.
+Never inline raw values in `className` strings (for example `text-[#33ff33]` or
+`text-[13px]`). Define colors and font sizes as named tokens in the Tailwind theme
+config and reference them by semantic name (for example `text-fg`, `text-label`).
 
 ## CSS Specificity
 
