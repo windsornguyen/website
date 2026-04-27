@@ -1,35 +1,30 @@
-This is a personal site built with `TanStack Start`, `Nitro`, `Vite 8`, and `Vite+`.
+# windsornguyen.com
 
-## Getting Started
+Personal site and blog. Statically prerendered with TanStack Start; MDX content, Tailwind v4, Nitro on Vercel.
 
-First, run the development server:
+View counts persist in Supabase through a service-role admin client. Server-only — the browser never sees a Supabase key.
 
-```bash
-vp dev
-# or
-pnpm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying files in `content/`, `src/routes/`, and `components/`.
-
-Useful commands:
+## Run
 
 ```bash
-vp check
-vp test
-vp build
-vp preview
-pnpm run test:smoke
+pnpm install
+pnpm dev          # http://localhost:3000
+pnpm test         # vitest
+pnpm check        # lint, format, typecheck, markdownlint
 ```
 
-## Learn More
+`SUPABASE_URL` and `SUPABASE_SECRET_KEY` must be set for the views API. Without them the server throws at module load.
 
-- [TanStack Start docs](https://tanstack.com/start/latest/docs/framework/react/overview)
-- [Nitro docs](https://nitro.build/)
-- [Vite+ docs](https://viteplus.dev/guide)
+## Layout
 
-## Deploy on Vercel
+- `content/` — MDX prose. `content/blog/*.mdx` are posts (each exports typed metadata via `definePost`); `bio.mdx` and `research.mdx` back the tabs of the same name.
+- `src/routes/` — TanStack file-based routes. `/api/views/$slug` is the only thing touching Supabase.
+- `src/lib/` — `views.ts` is client-safe (formatting + static fallback for prerender); `views-server.ts` and `supabase.ts` are server-only.
+- `supabase/` — declarative schema, migrations, seed. RLS is on but is not the auth boundary; mutations are denied for anon and bypassed by the service-role client.
+- `scripts/` — `pnpm site` for post CRUD, `pnpm db` wraps the Supabase CLI, `pnpm llms` regenerates `/llms.txt` and per-post `.md` mirrors.
 
-This app deploys on Vercel through Nitro's Vercel integration.
+Repo-wide conventions (MDX shape, design tokens, env files, CSS specificity) live in `AGENTS.md`.
+
+## License
+
+MIT.
