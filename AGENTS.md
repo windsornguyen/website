@@ -51,6 +51,11 @@ Never inline raw values in `className` strings (for example `text-[#33ff33]` or
 `text-[13px]`). Define colors and font sizes as named tokens in the Tailwind theme
 config and reference them by semantic name (for example `text-fg`, `text-label`).
 
+## Environment Files
+
+Never overwrite `.env` files wholesale. Append or modify specific lines. These files
+contain credentials and IDs (GA, Supabase, etc.) that are easy to silently lose.
+
 ## CSS Specificity
 
 Never use `!important`. If you need it, the architecture is wrong. Theme modes
