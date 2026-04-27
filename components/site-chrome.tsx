@@ -6,8 +6,11 @@ import { useLocation } from "@tanstack/react-router";
 
 import { useCommandMenu } from "@/components/command-menu";
 import ViewTransitionLink from "@/components/view-transition-link";
+import { mdxComponents } from "@/mdx-components";
 import { getAllPosts } from "@/src/lib/content";
 import { formatViewCount, getViewCountSync } from "@/src/lib/views";
+import Bio from "@/content/bio.mdx";
+import Research from "@/content/research.mdx";
 
 const tabs = ["Writing", "Research", "Projects", "Bio"] as const;
 type Tab = (typeof tabs)[number];
@@ -130,29 +133,11 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
           </ul>
         )}
 
-        {activeTab === "Research" && <p className="py-12 text-center text-label text-fg-muted">Coming soon.</p>}
+        {activeTab === "Research" && <Research components={mdxComponents} />}
 
         {activeTab === "Projects" && <p className="py-12 text-center text-label text-fg-muted">Coming soon.</p>}
 
-        {activeTab === "Bio" && (
-          <div
-            className="space-y-1 text-body leading-relaxed text-fg-secondary"
-            style={{ letterSpacing: "-0.011em" }}
-          >
-            <p>
-              I currently work on state space models in the{" "}
-              <a href="https://www.minregret.com/" target="_blank" rel="noopener noreferrer" className={linkClass}>Hazan Minregret Lab</a>{" "}
-              and the{" "}
-              <a href="https://tridao.me/" target="_blank" rel="noopener noreferrer" className={linkClass}>Dao AI Lab</a>.
-            </p>
-            <p>
-              In my free time, I lead the{" "}
-              <a href="https://princetonalignment.org/" target="_blank" rel="noopener noreferrer" className={linkClass}>Princeton AI Alignment Group</a>{" "}
-              and{" "}
-              <a href="https://club.hoagie.io/" target="_blank" rel="noopener noreferrer" className={linkClass}>Hoagie.io</a>.
-            </p>
-          </div>
-        )}
+        {activeTab === "Bio" && <Bio components={mdxComponents} />}
       </div>
     </>
   );
