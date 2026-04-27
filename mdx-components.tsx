@@ -43,7 +43,7 @@ export const mdxComponents: MDXComponents = {
   h4: (props: HeadingProps) => <h4 className="text-sm font-medium" {...props} />,
   p: (props: ParagraphProps) => (
     <p
-      className="mt-0.5 text-body leading-relaxed text-fg-secondary"
+      className="mt-4 text-body leading-relaxed text-fg-secondary"
       style={{ letterSpacing: "-0.011em" }}
       {...props}
     />
