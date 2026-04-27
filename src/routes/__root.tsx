@@ -11,7 +11,7 @@ import { MachineModeProvider, useMachineMode } from "@/components/machine-mode";
 import MachineView from "@/components/machine-view";
 import SiteChrome from "@/components/site-chrome";
 import { ThemeProvider, useTheme } from "@/components/theme-provider";
-import { siteMetadata } from "../content/contentManifest";
+import { siteMetadata } from "../lib/site";
 
 import appCss from "../styles.css?url";
 

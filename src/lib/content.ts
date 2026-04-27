@@ -5,14 +5,6 @@ import type { ComponentType } from "react";
 
 import type { ResolvedPostMetadata } from "../../content/schema";
 
-export const siteMetadata = {
-  title: "Windsor Nguyen",
-  titleTemplate: "%s | Windsor Nguyen",
-  description: "Windsor's personal website",
-  siteUrl: "https://windsornguyen.com",
-  twitterHandle: "@windsornguyen",
-} as const;
-
 export type MdxPageComponent = ComponentType<{ components?: MDXComponents }>;
 
 type BlogPostModule = {
@@ -43,7 +35,7 @@ for (const [filepath, module] of Object.entries(rawModules)) {
   if (typeof content === "string") {
     rawBySlug.set(slugFromPath(filepath), content);
   } else {
-    console.warn(`[contentManifest] rawModules content is not a string for ${filepath}:`, typeof content);
+    console.warn(`[content] rawModules content is not a string for ${filepath}:`, typeof content);
   }
 }
 
@@ -51,7 +43,7 @@ const blogPosts = Object.entries(blogModules)
   .map(([filepath, { default: Component, postMetadata }]) => {
     const rawSource = rawBySlug.get(postMetadata.slug) ?? rawBySlug.get(slugFromPath(filepath));
     if (typeof rawSource !== "string") {
-      console.error(`[contentManifest] Could not find rawSource for ${filepath}. Available keys:`, Array.from(rawBySlug.keys()));
+      console.error(`[content] Could not find rawSource for ${filepath}. Available keys:`, Array.from(rawBySlug.keys()));
     }
     return {
       ...postMetadata,

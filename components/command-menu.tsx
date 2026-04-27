@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { Command } from "cmdk";
 import { useNavigate } from "@tanstack/react-router";
 
-import { getAllPosts } from "@/src/content/contentManifest";
+import { getAllPosts } from "@/src/lib/content";
 
 type CommandMenuContextValue = {
   open: boolean;

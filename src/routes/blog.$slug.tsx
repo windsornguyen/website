@@ -3,7 +3,8 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { mdxComponents } from "@/mdx-components";
-import { getPostBySlug, siteMetadata } from "../content/contentManifest";
+import { getPostBySlug } from "../lib/content";
+import { siteMetadata } from "../lib/site";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {

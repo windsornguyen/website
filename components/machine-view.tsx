@@ -2,7 +2,8 @@
 
 import { useLocation } from "@tanstack/react-router";
 
-import { getAllPosts, getPostBySlug, siteMetadata } from "@/src/content/contentManifest";
+import { getAllPosts, getPostBySlug } from "@/src/lib/content";
+import { siteMetadata } from "@/src/lib/site";
 import { buildHomeMachineMarkdown, buildPostMachineMarkdown } from "@/src/lib/machine-markdown";
 
 export default function MachineView() {

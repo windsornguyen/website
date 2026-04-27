@@ -2,7 +2,8 @@
 
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getAllPosts, siteMetadata } from "../content/contentManifest";
+import { getAllPosts } from "../lib/content";
+import { siteMetadata } from "../lib/site";
 
 function buildSitemapXml() {
   const staticUrls = [

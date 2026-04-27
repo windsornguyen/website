@@ -6,7 +6,7 @@ import { useLocation } from "@tanstack/react-router";
 
 import { useCommandMenu } from "@/components/command-menu";
 import ViewTransitionLink from "@/components/view-transition-link";
-import { getAllPosts } from "@/src/content/contentManifest";
+import { getAllPosts } from "@/src/lib/content";
 import { formatViewCount, getViewCount } from "@/src/lib/views";
 
 const tabs = ["Writing", "Research", "Projects", "Bio"] as const;
