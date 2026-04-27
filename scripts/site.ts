@@ -102,8 +102,8 @@ cli
           slug,
           title: options.title,
           description: options.description,
-          canonical: `/blog/${slug}`,
           publishedAt: options.publishedAt,
+          status: "draft",
         },
         options.force,
       );
