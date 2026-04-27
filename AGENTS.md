@@ -7,6 +7,33 @@
 - **Keep MDX pure.** React logic belongs in components, not inline in MDX. MDX files
   should read like markdown with occasional component imports.
 
+### Canonical MDX shape
+
+Every blog post follows the same skeleton:
+
+```mdx
+import { definePost } from "../schema";
+
+export const postMetadata = definePost({ ... });
+
+# title
+
+<small>Last updated: ...</small>
+
+prose, in pure markdown.
+```
+
+Rules for the prose body:
+
+- Use markdown for everything markdown supports: `*em*`, `**strong**`, `> quote`,
+  `` `code` ``, lists, headings, links. Never reach for the raw HTML/JSX equivalents
+  (`<em>`, `<strong>`, `<blockquote>`, `<code>`, `<br />`).
+- The only HTML primitive allowed in prose is `<small>`, reserved for the metadata
+  caption block at the top (and optionally the bottom). It is styled centrally in
+  `mdx-components.tsx` — do not hand-wrap its contents in `<em>` for italics.
+- The `import` + `definePost(...)` block at the top is the only TypeScript that
+  belongs in MDX. Treat it as typed frontmatter, not as prose.
+
 ## Content Casing
 
 All non-blog UI text uses standard English capitalization. Blog titles and body text

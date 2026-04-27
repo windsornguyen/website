@@ -55,7 +55,7 @@ describe("machine markdown builders", () => {
     expect(markdown).toContain(
       'It\'s surprising difficult to create a blogging website from scratch and even more difficult to write good blog posts.',
     );
-    expect(markdown).toContain("<em>--Windsor</em>");
+    expect(markdown).toContain("*--Windsor*");
     expect(markdown).not.toContain("definePost");
     expect(markdown).not.toMatch(/^import\s+/m);
   });

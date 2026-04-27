@@ -107,4 +107,10 @@ export const mdxComponents: MDXComponents = {
   blockquote: (props: BlockquoteProps) => (
     <blockquote className="ml-[0.075em] border-l-2 border-edge pl-4 text-fg-muted" {...props} />
   ),
+  small: (props: ComponentPropsWithoutRef<"small">) => (
+    <small
+      className="my-3 block text-caption italic text-fg-muted [&>p]:text-caption [&>p]:italic [&>p]:text-fg-muted"
+      {...props}
+    />
+  ),
 };

@@ -64,9 +64,7 @@ export const postMetadata = definePost({
 
 # ${metadata.title}
 
-<small>
-  <em>Last updated: ${renderTimestampLabel(metadata.publishedAt)}.</em>
-</small>
+<small>Last updated: ${renderTimestampLabel(metadata.publishedAt)}.</small>
 
 Start writing here.
 `;
