@@ -15,7 +15,7 @@ import { siteMetadata } from "../lib/site";
 
 import appCss from "../styles.css?url";
 
-const gaId = process.env.gaID ?? import.meta.env.VITE_GA_ID;
+const gaId = process.env.GA_ID ?? import.meta.env.VITE_GA_ID;
 
 export const Route = createRootRoute({
   head: () => ({
