@@ -38,6 +38,9 @@ certificates/
 # lychee cache
 .lycheecache
 
+# supabase local data
+.supabase
+
 # generated llms.txt files (build artifact)
 public/llms.txt
 public/llms-full.txt

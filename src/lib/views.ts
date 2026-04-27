@@ -1,29 +1,21 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
 /**
- * Blog post view counts.
+ * Blog post view counts — client-safe surface.
  *
- * Currently in-memory mock data. Eventually backed by Vercel KV,
- * Supabase, or a similar persistent store. The API surface stays
- * the same — swap the backing store, not the callers.
+ * Static fallbacks for SSG/prerender plus pure formatting helpers.
+ * The async, Supabase-backed read/write path lives in views-server.ts
+ * and is server-only (it imports the admin client which requires
+ * SUPABASE_SECRET_KEY).
  */
 
-const views: Record<string, number> = {
+const STATIC_VIEWS: Record<string, number> = {
   "reflecting-on-2024": 1_247,
   "first-post": 438,
 };
 
-export function getViewCount(slug: string): number {
-  return views[slug] ?? 0;
-}
-
-export function incrementViewCount(slug: string): number {
-  views[slug] = (views[slug] ?? 0) + 1;
-  return views[slug];
-}
-
-export function getAllViewCounts(): Record<string, number> {
-  return { ...views };
+export function getViewCountSync(slug: string): number {
+  return STATIC_VIEWS[slug] ?? 0;
 }
 
 export function formatViewCount(count: number): string {

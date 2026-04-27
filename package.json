@@ -11,6 +11,7 @@
     "routegen": "tsr generate",
     "routewatch": "tsr watch",
     "site": "tsx scripts/site.ts",
+    "db": "tsx scripts/db.ts",
     "test": "vp test --run",
     "test:smoke": "node --test tests/site-smoke.smoke.mjs",
     "lint": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#.output\" \"#dist\"",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
+    "@supabase/supabase-js": "^2.99.3",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-router": "^1.168.1",
     "@tanstack/react-start": "^1.167.2",
@@ -50,6 +52,7 @@
     "markdownlint-cli2": "^0.21.0",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
+    "picocolors": "^1.1.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.1",

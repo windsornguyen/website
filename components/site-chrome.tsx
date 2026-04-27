@@ -7,7 +7,7 @@ import { useLocation } from "@tanstack/react-router";
 import { useCommandMenu } from "@/components/command-menu";
 import ViewTransitionLink from "@/components/view-transition-link";
 import { getAllPosts } from "@/src/lib/content";
-import { formatViewCount, getViewCount } from "@/src/lib/views";
+import { formatViewCount, getViewCountSync } from "@/src/lib/views";
 
 const tabs = ["Writing", "Research", "Projects", "Bio"] as const;
 type Tab = (typeof tabs)[number];
@@ -122,7 +122,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-0.5 pt-0.5 text-label text-fg-muted tabular-nums">
                     <time>{formatDate(post.publishedAt)}</time>
-                    <span className="text-caption">{formatViewCount(getViewCount(post.slug))}</span>
+                    <span className="text-caption">{formatViewCount(getViewCountSync(post.slug))}</span>
                   </div>
                 </ViewTransitionLink>
               </li>
