@@ -3,6 +3,7 @@
 
 import { cac } from "cac";
 
+import { error, heading, pc, success, table } from "./lib/fmt";
 import {
   readPostEntries,
   renderTimestampLabel,
@@ -45,9 +46,17 @@ cli
           return;
         }
 
-        for (const post of posts) {
-          console.log(`${post.slug}\t${post.title}\t${renderTimestampLabel(post.publishedAt)}`);
-        }
+        heading(`Posts (${posts.length})`);
+        table(
+          posts.map((post) => [
+            pc.bold(post.title),
+            pc.dim(post.slug),
+            pc.yellow(renderTimestampLabel(post.publishedAt)),
+            pc.dim(post.status),
+          ]),
+          ["Title", "Slug", "Published", "Status"],
+        );
+        console.log();
         return;
       }
 
@@ -57,27 +66,21 @@ cli
 
         if (options.json) {
           console.log(
-            JSON.stringify(
-              {
-                ok: errors.length === 0,
-                postCount: posts.length,
-                errors,
-              },
-              null,
-              2,
-            ),
+            JSON.stringify({ ok: errors.length === 0, postCount: posts.length, errors }, null, 2),
           );
           return;
         }
 
         if (errors.length === 0) {
-          console.log(`Verified ${posts.length} post(s).`);
+          success(`Verified ${posts.length} post(s). No issues found.`);
           return;
         }
 
-        for (const error of errors) {
-          console.error(error);
+        heading("Verification Errors");
+        for (const err of errors) {
+          error(err);
         }
+        console.log();
 
         process.exitCode = 1;
         return;
@@ -108,7 +111,7 @@ cli
         options.force,
       );
 
-      console.log(`Created ${postPath}`);
+      success(`Created ${pc.underline(postPath)}`);
     },
   );
 
