@@ -10,14 +10,14 @@ const { rpc, maybeSingle } = vi.hoisted(() => ({
 // Replace the supabase admin client before views-server imports it,
 // so the env-var validation in supabase.ts never runs in tests.
 vi.mock("../src/lib/supabase", () => ({
-  supabase: {
+  getSupabase: () => ({
     rpc,
     from: () => ({
       select: () => ({
         eq: () => ({ maybeSingle }),
       }),
     }),
-  },
+  }),
 }));
 
 import { getViewCount, incrementViewCount } from "../src/lib/views-server";

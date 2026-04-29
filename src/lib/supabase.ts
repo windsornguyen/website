@@ -7,18 +7,28 @@
  * All database access goes through this client from server routes; the
  * browser never sees Supabase keys.
  *
- * RLS is enabled on tables but is not the auth boundary — application
- * routes are. Anything touching this module is server-side only.
+ * Lazily initialized: env validation happens on first call, not at module
+ * load. TanStack Start eagerly imports every route file at server boot, so
+ * a module-level throw here would take down the entire dev server even for
+ * pages that never touch the database.
  */
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_SECRET_KEY;
+let cached: SupabaseClient | null = null;
 
-if (!url) throw new Error("Missing SUPABASE_URL");
-if (!key) throw new Error("Missing SUPABASE_SECRET_KEY");
+export function getSupabase(): SupabaseClient {
+  if (cached) return cached;
 
-export const supabase = createClient(url, key, {
-  auth: { persistSession: false, autoRefreshToken: false },
-});
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+
+  if (!url) throw new Error("Missing SUPABASE_URL");
+  if (!key) throw new Error("Missing SUPABASE_SECRET_KEY");
+
+  cached = createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+
+  return cached;
+}

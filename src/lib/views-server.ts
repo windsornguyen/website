@@ -8,10 +8,10 @@
  * (per AGENTS.md: never silently fail or fallback on the data layer).
  */
 
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 
 export async function getViewCount(slug: string): Promise<number> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("page_views")
     .select("count")
     .eq("slug", slug)
@@ -25,7 +25,7 @@ export async function getViewCount(slug: string): Promise<number> {
 }
 
 export async function incrementViewCount(slug: string): Promise<number> {
-  const { data, error } = await supabase.rpc("increment_page_view", {
+  const { data, error } = await getSupabase().rpc("increment_page_view", {
     page_slug: slug,
   });
 
