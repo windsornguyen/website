@@ -1,6 +1,6 @@
 {
   "name": "windsornguyen.com",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "routegen": "tsr generate",
     "routewatch": "tsr watch",
     "site": "tsx scripts/site.ts",
+    "ship": "bash scripts/ship.sh",
     "db": "tsx scripts/db.ts",
     "test": "vp test --run",
     "test:smoke": "node --test tests/site-smoke.smoke.mjs",
