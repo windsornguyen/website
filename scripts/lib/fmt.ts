@@ -8,6 +8,8 @@ import pc from "picocolors";
 
 export { pc };
 
+const ansiEscapePattern = new RegExp(String.raw`\x1b\[[0-9;]*m`, "g");
+
 export function heading(text: string) {
   console.log(`\n${pc.bold(text)}\n`);
 }
@@ -55,5 +57,5 @@ export function table(rows: string[][], headers?: string[]) {
 }
 
 function stripAnsi(str: string): string {
-  return str.replace(/\x1b\[[0-9;]*m/g, "");
+  return str.replace(ansiEscapePattern, "");
 }

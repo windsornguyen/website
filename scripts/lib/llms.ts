@@ -24,10 +24,14 @@ const titleHeading = /^#\s+.*\n*/;
 
 export function parseField(name: string, source: string): string {
   const dq = source.match(doubleQuoted(name));
-  if (dq) return dq[1];
+  if (dq) {
+    return dq[1];
+  }
 
   const sq = source.match(singleQuoted(name));
-  if (sq) return sq[1];
+  if (sq) {
+    return sq[1];
+  }
 
   throw new Error(`Missing "${name}" in post metadata`);
 }

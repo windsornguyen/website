@@ -23,7 +23,9 @@ type SupabaseAdminConfig = {
 let cached: SupabaseClient | null = null;
 
 export function getSupabase(): SupabaseClient {
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
 
   const config = readSupabaseAdminConfig();
 
