@@ -3,13 +3,17 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentType } from "react";
 
-import type { ResolvedPostMetadata } from "../../content/schema";
+import type { BlogSlug, ResolvedPostMetadata } from "../../content/schema";
 
 export type MdxPageComponent = ComponentType<{ components?: MDXComponents }>;
 
 type BlogPostModule = {
   default: MdxPageComponent;
   postMetadata: ResolvedPostMetadata;
+};
+
+type RawMdxModule = {
+  default: string;
 };
 
 export type BlogPostEntry = ResolvedPostMetadata & {
@@ -28,27 +32,48 @@ function slugFromPath(filepath: string): string {
   return filepath.replace(/^.*\//, "").replace(/\.mdx$/, "");
 }
 
+function readRawMdxSource(filepath: string, module: unknown): string {
+  if (typeof module === "string") {
+    return module;
+  }
+
+  if (isRawMdxModule(module)) {
+    return module.default;
+  }
+
+  throw new Error(`Raw MDX import for "${filepath}" did not return source text.`);
+}
+
+function isRawMdxModule(value: unknown): value is RawMdxModule {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+
+  if (!("default" in value)) {
+    return false;
+  }
+
+  return typeof value.default === "string";
+}
+
 const rawBySlug = new Map<string, string>();
 for (const [filepath, module] of Object.entries(rawModules)) {
-  // Vite 5+ with ?raw returns { default: "string content" } when import is not specified
-  const content = (module as any)?.default ?? module;
-  if (typeof content === "string") {
-    rawBySlug.set(slugFromPath(filepath), content);
-  } else {
-    console.warn(`[content] rawModules content is not a string for ${filepath}:`, typeof content);
-  }
+  const source = readRawMdxSource(filepath, module);
+  rawBySlug.set(slugFromPath(filepath), source);
 }
 
 const blogPosts = Object.entries(blogModules)
   .map(([filepath, { default: Component, postMetadata }]) => {
     const rawSource = rawBySlug.get(postMetadata.slug) ?? rawBySlug.get(slugFromPath(filepath));
+
     if (typeof rawSource !== "string") {
-      console.error(`[content] Could not find rawSource for ${filepath}. Available keys:`, Array.from(rawBySlug.keys()));
+      throw new Error(`Missing raw MDX source for "${filepath}".`);
     }
+
     return {
       ...postMetadata,
       Component,
-      rawSource: rawSource ?? "",
+      rawSource,
     };
   })
   .filter((post) => post.status === "published")
@@ -66,6 +91,6 @@ export function getAllPosts(): BlogPostEntry[] {
   return blogPosts;
 }
 
-export function getPostBySlug(slug: string): BlogPostEntry | undefined {
+export function getPostBySlug(slug: BlogSlug): BlogPostEntry | undefined {
   return postsBySlug.get(slug);
 }

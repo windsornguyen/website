@@ -30,7 +30,7 @@ export default defineConfig({
     trailingComma: "all",
     endOfLine: "lf",
     experimentalTailwindcss: {},
-    ignorePatterns: ["src/routeTree.gen.ts"],
+    ignorePatterns: ["README", "content/blog/*.mdx", "public/blog/*.md", "src/routeTree.gen.ts"],
   },
   plugins: [
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
@@ -40,12 +40,21 @@ export default defineConfig({
         remarkPlugins: [[remarkCodeHike, codeHikeConfig]],
         recmaPlugins: [[recmaCodeHike, codeHikeConfig]],
       });
+      const transform = mdxPlugin.transform;
+
       return {
         ...mdxPlugin,
         enforce: "pre",
         transform(code, id) {
-          if (id.includes("?raw")) return;
-          return (mdxPlugin as any).transform?.call(this, code, id);
+          if (id.includes("?raw")) {
+            return;
+          }
+
+          if (typeof transform !== "function") {
+            return;
+          }
+
+          return transform.call(this, code, id);
         },
       };
     })(),

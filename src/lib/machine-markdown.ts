@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
-import { stripPreamble } from "@/scripts/lib/llms";
+import { stripPreamble, stripTitleHeading } from "@/scripts/lib/llms";
 
 export type MachineSiteMetadata = {
   title: string;
@@ -66,7 +66,7 @@ export function buildPostMachineMarkdown(
   }
 
   const stripped = stripPreamble(post.rawSource);
-  const prose = stripped.replace(/^#\s+.*\n*/, "");
+  const prose = stripTitleHeading(stripped);
 
   return [
     `# ${post.title}`,

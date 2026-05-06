@@ -15,20 +15,40 @@
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
+type SupabaseAdminConfig = {
+  url: string;
+  secretKey: string;
+};
+
 let cached: SupabaseClient | null = null;
 
 export function getSupabase(): SupabaseClient {
   if (cached) return cached;
 
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SECRET_KEY;
+  const config = readSupabaseAdminConfig();
 
-  if (!url) throw new Error("Missing SUPABASE_URL");
-  if (!key) throw new Error("Missing SUPABASE_SECRET_KEY");
-
-  cached = createClient(url, key, {
+  cached = createClient(config.url, config.secretKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
   return cached;
+}
+
+function readSupabaseAdminConfig(): SupabaseAdminConfig {
+  const config = {
+    url: readRequiredEnv("SUPABASE_URL"),
+    secretKey: readRequiredEnv("SUPABASE_SECRET_KEY"),
+  };
+
+  return config;
+}
+
+function readRequiredEnv(name: string): string {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`Missing ${name}`);
+  }
+
+  return value;
 }

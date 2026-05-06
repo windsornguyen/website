@@ -11,7 +11,7 @@
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { parseField, stripPreamble } from "./lib/llms";
+import { parseField, stripPreamble, stripTitleHeading } from "./lib/llms";
 
 const SITE_URL = "https://windsornguyen.com";
 const BLOG_DIR = path.resolve("content/blog");
@@ -39,7 +39,7 @@ async function readPosts(): Promise<(PostMeta & { markdown: string })[]> {
           description: parseField("description", source),
           publishedAt: parseField("publishedAt", source),
           status: parseField("status", source),
-          markdown: stripPreamble(source),
+          markdown: stripTitleHeading(stripPreamble(source)),
         };
       }),
   );
@@ -67,9 +67,7 @@ async function main() {
     "",
     "## Writing",
     "",
-    ...posts.map(
-      (p) => `- [${p.title}](${SITE_URL}/blog/${p.slug}.md): ${p.description}`,
-    ),
+    ...posts.map((p) => `- [${p.title}](${SITE_URL}/blog/${p.slug}.md): ${p.description}`),
     "",
     "## Links",
     "",
@@ -88,14 +86,7 @@ async function main() {
     "",
     "> Complete blog content for LLM consumption.",
     "",
-    ...posts.flatMap((p) => [
-      `## ${p.title}`,
-      "",
-      p.markdown,
-      "",
-      "---",
-      "",
-    ]),
+    ...posts.flatMap((p) => [`## ${p.title}`, "", p.markdown, "", "---", ""]),
   ].join("\n");
 
   await writeFile(path.join(OUT_DIR, "llms-full.txt"), full, "utf8");

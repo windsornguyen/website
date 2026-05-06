@@ -9,8 +9,34 @@
 
 export type PostStatus = "draft" | "published";
 
+declare const blogSlugBrand: unique symbol;
+
+export type BlogSlug = string & {
+  readonly [blogSlugBrand]: "BlogSlug";
+};
+
+const blogSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export function parseBlogSlug(value: string): BlogSlug | undefined {
+  if (!blogSlugPattern.test(value)) {
+    return undefined;
+  }
+
+  return value as BlogSlug;
+}
+
+export function assertBlogSlug(value: string): BlogSlug {
+  const slug = parseBlogSlug(value);
+
+  if (!slug) {
+    throw new Error(`Invalid blog slug "${value}". Use lowercase kebab-case.`);
+  }
+
+  return slug;
+}
+
 /**
- * Canonical tag vocabulary. Add new tags here — the compiler
+ * Canonical tag vocabulary. Add new tags here. The compiler
  * will reject any tag not in this union across all MDX files.
  */
 export type Tag =
@@ -25,7 +51,7 @@ export type Tag =
   | "systems";
 
 export type BlogPostMetadata = {
-  slug: string;
+  slug: BlogSlug;
   title: string;
   subtitle?: string;
   description: string;
@@ -37,6 +63,10 @@ export type BlogPostMetadata = {
 
 export type ResolvedPostMetadata = BlogPostMetadata & {
   canonical: string;
+};
+
+export type BlogPostMetadataInput = Omit<BlogPostMetadata, "slug"> & {
+  slug: string;
 };
 
 /**
@@ -52,10 +82,13 @@ export type ResolvedPostMetadata = BlogPostMetadata & {
  * });
  * ```
  */
-export function definePost(metadata: BlogPostMetadata): ResolvedPostMetadata {
+export function definePost(metadata: BlogPostMetadataInput): ResolvedPostMetadata {
+  const slug = assertBlogSlug(metadata.slug);
+
   return {
     ...metadata,
-    canonical: `/blog/${metadata.slug}`,
+    slug,
+    canonical: `/blog/${slug}`,
   };
 }
 

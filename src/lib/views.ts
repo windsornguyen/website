@@ -9,22 +9,32 @@
  * SUPABASE_SECRET_KEY).
  */
 
-const STATIC_VIEWS: Record<string, number> = {
+import type { BlogSlug } from "../../content/schema";
+
+type ViewCount = number;
+
+const STATIC_VIEWS: Partial<Record<string, ViewCount>> = {
   "reflecting-on-2024": 1_247,
   "first-post": 438,
 };
 
-export function getViewCountSync(slug: string): number {
+export function getViewCountSync(slug: BlogSlug): ViewCount {
   return STATIC_VIEWS[slug] ?? 0;
 }
 
-export function formatViewCount(count: number): string {
-  const n =
-    count >= 1_000_000
-      ? `${(count / 1_000_000).toFixed(1)}M`
-      : count >= 1_000
-        ? `${(count / 1_000).toFixed(1)}k`
-        : count.toLocaleString();
+export function formatViewCount(count: ViewCount): string {
+  let formattedCount: string;
 
-  return `${n} ${count === 1 ? "view" : "views"}`;
+  if (count >= 1_000_000) {
+    formattedCount = `${(count / 1_000_000).toFixed(1)}M`;
+  } else if (count >= 1_000) {
+    formattedCount = `${(count / 1_000).toFixed(1)}k`;
+  } else {
+    formattedCount = count.toLocaleString();
+  }
+
+  const noun = count === 1 ? "view" : "views";
+  const label = `${formattedCount} ${noun}`;
+
+  return label;
 }

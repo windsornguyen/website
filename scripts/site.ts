@@ -3,6 +3,7 @@
 
 import { cac } from "cac";
 
+import { parseBlogSlug } from "../content/schema";
 import { error, heading, pc, success, table } from "./lib/fmt";
 import {
   readPostEntries,
@@ -94,10 +95,11 @@ cli
         throw new Error("--title is required");
       }
 
-      const slug = options.slug ?? slugifyTitle(options.title);
+      const slugCandidate = options.slug ?? slugifyTitle(options.title);
+      const slug = parseBlogSlug(slugCandidate);
 
       if (!slug) {
-        throw new Error("Could not derive a slug from the provided title.");
+        throw new Error("Could not derive a lowercase kebab-case slug from the provided title.");
       }
 
       const postPath = await writePostFile(

@@ -2,13 +2,20 @@
 
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
+import { parseBlogSlug } from "@/content/schema";
 import { mdxComponents } from "@/mdx-components";
 import { getPostBySlug } from "../lib/content";
 import { siteMetadata } from "../lib/site";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
-    const post = getPostBySlug(params.slug);
+    const slug = parseBlogSlug(params.slug);
+
+    if (!slug) {
+      throw notFound();
+    }
+
+    const post = getPostBySlug(slug);
 
     if (!post) {
       throw notFound();
@@ -63,7 +70,13 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function BlogPostRoute() {
-  const { slug } = Route.useParams();
+  const params = Route.useParams();
+  const slug = parseBlogSlug(params.slug);
+
+  if (!slug) {
+    throw notFound();
+  }
+
   const post = getPostBySlug(slug);
 
   if (!post) {

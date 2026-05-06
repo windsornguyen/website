@@ -17,8 +17,10 @@ const importLine = /^import\s+.*;\s*\n/gm;
  * Matches the entire `export const postMetadata = definePost({ ... });` block.
  * Uses non-greedy [\s\S]*? to stop at the first closing `});`.
  */
-const definePostBlock =
-  /export\s+const\s+postMetadata\s*=\s*definePost\(\{[\s\S]*?\}\);?\s*\n*/m;
+const definePostBlock = /export\s+const\s+postMetadata\s*=\s*definePost\(\{[\s\S]*?\}\);?\s*\n*/m;
+
+/** Matches the first markdown H1 heading in a prose document. */
+const titleHeading = /^#\s+.*\n*/;
 
 export function parseField(name: string, source: string): string {
   const dq = source.match(doubleQuoted(name));
@@ -36,4 +38,8 @@ export function parseField(name: string, source: string): string {
  */
 export function stripPreamble(source: string): string {
   return source.replace(importLine, "").replace(definePostBlock, "").trim();
+}
+
+export function stripTitleHeading(source: string): string {
+  return source.replace(titleHeading, "").trim();
 }

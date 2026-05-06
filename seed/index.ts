@@ -18,9 +18,7 @@ function generateSeedSql(): string {
     "",
   ];
 
-  const values = POSTS.map(
-    (post) => `  ('${post.slug}', ${post.views}, now())`,
-  ).join(",\n");
+  const values = POSTS.map((post) => `  ('${post.slug}', ${post.views}, now())`).join(",\n");
 
   lines.push(
     "insert into public.page_views (slug, count, updated_at) values",
@@ -32,4 +30,4 @@ function generateSeedSql(): string {
   return lines.join("\n");
 }
 
-console.log(generateSeedSql());
+process.stdout.write(`${generateSeedSql()}\n`);

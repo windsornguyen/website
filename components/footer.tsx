@@ -20,7 +20,7 @@ const Footer = () => {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-fg-muted transition-colors duration-200 hover:text-fg-secondary"
+            className="text-fg-muted hover:text-fg-secondary transition-colors duration-200"
           >
             {link.name}
           </a>

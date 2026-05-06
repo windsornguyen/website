@@ -8,14 +8,21 @@
  * (per AGENTS.md: never silently fail or fallback on the data layer).
  */
 
+import type { BlogSlug } from "../../content/schema";
 import { getSupabase } from "./supabase";
 
-export async function getViewCount(slug: string): Promise<number> {
+type PageViewRow = {
+  count: number;
+};
+
+type ViewCount = number;
+
+export async function getViewCount(slug: BlogSlug): Promise<ViewCount> {
   const { data, error } = await getSupabase()
     .from("page_views")
     .select("count")
     .eq("slug", slug)
-    .maybeSingle();
+    .maybeSingle<PageViewRow>();
 
   if (error) {
     throw new Error(`Failed to read view count for "${slug}": ${error.message}`);
@@ -24,7 +31,7 @@ export async function getViewCount(slug: string): Promise<number> {
   return data?.count ?? 0;
 }
 
-export async function incrementViewCount(slug: string): Promise<number> {
+export async function incrementViewCount(slug: BlogSlug): Promise<ViewCount> {
   const { data, error } = await getSupabase().rpc("increment_page_view", {
     page_slug: slug,
   });

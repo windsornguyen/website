@@ -3,7 +3,8 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import type { BlogPostMetadata } from "../../content/schema";
+import { assertBlogSlug } from "../../content/schema";
+import type { BlogPostMetadata, BlogPostMetadataInput, PostStatus } from "../../content/schema";
 
 export type BlogPostEntry = BlogPostMetadata & {
   path: string;
@@ -21,13 +22,26 @@ function parseStringField(name: string, source: string) {
   return match[1];
 }
 
+function parsePostStatus(source: string): PostStatus {
+  const status = parseStringField("status", source);
+
+  if (status === "draft" || status === "published") {
+    return status;
+  }
+
+  throw new Error(`Invalid post status "${status}". Expected "draft" or "published".`);
+}
+
 export function parsePostMetadata(source: string): BlogPostMetadata {
+  const slug = assertBlogSlug(parseStringField("slug", source));
+  const status = parsePostStatus(source);
+
   return {
-    slug: parseStringField("slug", source),
+    slug,
     title: parseStringField("title", source),
     description: parseStringField("description", source),
     publishedAt: parseStringField("publishedAt", source),
-    status: (parseStringField("status", source) as BlogPostMetadata["status"]) ?? "draft",
+    status,
   };
 }
 
@@ -51,7 +65,7 @@ export function renderTimestampLabel(isoTimestamp: string) {
   }).format(new Date(isoTimestamp));
 }
 
-export function renderPostTemplate(metadata: BlogPostMetadata) {
+export function renderPostTemplate(metadata: BlogPostMetadataInput) {
   return `import { definePost } from "../schema";
 
 export const postMetadata = definePost({
@@ -117,7 +131,7 @@ export function validatePostEntries(posts: BlogPostEntry[]) {
   return errors;
 }
 
-export async function writePostFile(metadata: BlogPostMetadata, force = false) {
+export async function writePostFile(metadata: BlogPostMetadataInput, force = false) {
   const postPath = path.join(blogDirectory, `${metadata.slug}.mdx`);
 
   if (!force) {

@@ -28,14 +28,14 @@ export const mdxComponents: MDXComponents = {
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="mt-5 mb-1 text-base font-medium text-fg-emphasis"
+      className="text-fg-emphasis mt-5 mb-1 text-base font-medium"
       style={{ letterSpacing: "-0.02em" }}
       {...props}
     />
   ),
   h3: (props: HeadingProps) => (
     <h3
-      className="mt-4 mb-1 text-sm font-medium text-fg-emphasis"
+      className="text-fg-emphasis mt-4 mb-1 text-sm font-medium"
       style={{ letterSpacing: "-0.01em" }}
       {...props}
     />
@@ -43,21 +43,21 @@ export const mdxComponents: MDXComponents = {
   h4: (props: HeadingProps) => <h4 className="text-sm font-medium" {...props} />,
   p: (props: ParagraphProps) => (
     <p
-      className="mt-4 text-body leading-relaxed text-fg-secondary"
+      className="text-body text-fg-secondary mt-4 leading-relaxed"
       style={{ letterSpacing: "-0.011em" }}
       {...props}
     />
   ),
   ol: (props: ListProps) => (
-    <ol className="list-decimal space-y-0.5 pl-5 text-body text-fg-secondary" {...props} />
+    <ol className="text-body text-fg-secondary list-decimal space-y-0.5 pl-5" {...props} />
   ),
   ul: (props: ListProps) => (
-    <ul className="list-disc space-y-0.5 pl-5 text-body text-fg-secondary" {...props} />
+    <ul className="text-body text-fg-secondary list-disc space-y-0.5 pl-5" {...props} />
   ),
   li: (props: ListItemProps) => <li className="pl-0.5" {...props} />,
   em: (props: ComponentPropsWithoutRef<"em">) => <em className="font-medium" {...props} />,
   strong: (props: ComponentPropsWithoutRef<"strong">) => (
-    <strong className="font-semibold text-fg-emphasis" {...props} />
+    <strong className="text-fg-emphasis font-semibold" {...props} />
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
     if (href?.startsWith("/")) {
@@ -105,11 +105,11 @@ export const mdxComponents: MDXComponents = {
     </table>
   ),
   blockquote: (props: BlockquoteProps) => (
-    <blockquote className="ml-[0.075em] border-l-2 border-edge pl-4 text-fg-muted" {...props} />
+    <blockquote className="border-edge text-fg-muted ml-[0.075em] border-l-2 pl-4" {...props} />
   ),
   small: (props: ComponentPropsWithoutRef<"small">) => (
     <small
-      className="my-3 block text-caption italic text-fg-muted [&>p]:text-caption [&>p]:italic [&>p]:text-fg-muted"
+      className="text-caption text-fg-muted [&>p]:text-caption [&>p]:text-fg-muted my-3 block italic [&>p]:italic"
       {...props}
     />
   ),

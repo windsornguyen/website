@@ -4,7 +4,7 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { parseField, stripPreamble } from "../scripts/lib/llms";
+import { parseField, stripPreamble, stripTitleHeading } from "../scripts/lib/llms";
 
 const BLOG_DIR = path.resolve("content/blog");
 const PUBLIC_DIR = path.resolve("public");
@@ -80,7 +80,9 @@ describe("llms.txt parity with source MDX", () => {
     for (const file of mdxFiles.filter((f) => f.endsWith(".mdx"))) {
       const source = await readFile(path.join(BLOG_DIR, file), "utf8");
       const status = parseField("status", source);
-      if (status !== "published") continue;
+      if (status !== "published") {
+        continue;
+      }
 
       const slug = parseField("slug", source);
       const mdPath = path.join(PUBLIC_DIR, "blog", `${slug}.md`);
@@ -94,10 +96,12 @@ describe("llms.txt parity with source MDX", () => {
     for (const file of mdxFiles.filter((f) => f.endsWith(".mdx"))) {
       const source = await readFile(path.join(BLOG_DIR, file), "utf8");
       const status = parseField("status", source);
-      if (status !== "published") continue;
+      if (status !== "published") {
+        continue;
+      }
 
       const slug = parseField("slug", source);
-      const expectedProse = stripPreamble(source);
+      const expectedProse = stripTitleHeading(stripPreamble(source));
       const md = await readFile(path.join(PUBLIC_DIR, "blog", `${slug}.md`), "utf8");
 
       expect(md, `${slug}.md is missing prose content`).toContain(expectedProse);
@@ -105,9 +109,7 @@ describe("llms.txt parity with source MDX", () => {
   });
 
   it("generated .md files contain no JS artifacts", async () => {
-    const mdFiles = (await readdir(path.join(PUBLIC_DIR, "blog"))).filter((f) =>
-      f.endsWith(".md"),
-    );
+    const mdFiles = (await readdir(path.join(PUBLIC_DIR, "blog"))).filter((f) => f.endsWith(".md"));
 
     for (const file of mdFiles) {
       const md = await readFile(path.join(PUBLIC_DIR, "blog", file), "utf8");
@@ -124,7 +126,9 @@ describe("llms.txt parity with source MDX", () => {
     for (const file of mdxFiles.filter((f) => f.endsWith(".mdx"))) {
       const source = await readFile(path.join(BLOG_DIR, file), "utf8");
       const status = parseField("status", source);
-      if (status !== "published") continue;
+      if (status !== "published") {
+        continue;
+      }
 
       const slug = parseField("slug", source);
       const title = parseField("title", source);
@@ -141,15 +145,16 @@ describe("llms.txt parity with source MDX", () => {
     for (const file of mdxFiles.filter((f) => f.endsWith(".mdx"))) {
       const source = await readFile(path.join(BLOG_DIR, file), "utf8");
       const status = parseField("status", source);
-      if (status !== "published") continue;
+      if (status !== "published") {
+        continue;
+      }
 
       const slug = parseField("slug", source);
-      const firstProseLine = stripPreamble(source).split("\n").find((l) => l.trim().length > 20);
+      const firstProseLine = stripPreamble(source)
+        .split("\n")
+        .find((l) => l.trim().length > 20);
 
-      expect(
-        fullTxt,
-        `llms-full.txt missing content from "${slug}"`,
-      ).toContain(firstProseLine);
+      expect(fullTxt, `llms-full.txt missing content from "${slug}"`).toContain(firstProseLine);
     }
   });
 });

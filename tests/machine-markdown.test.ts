@@ -5,10 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { parseField } from "../scripts/lib/llms";
-import {
-  buildHomeMachineMarkdown,
-  buildPostMachineMarkdown,
-} from "../src/lib/machine-markdown";
+import { buildHomeMachineMarkdown, buildPostMachineMarkdown } from "../src/lib/machine-markdown";
 
 const FIRST_POST_PATH = path.resolve("content/blog/first-post.mdx");
 
@@ -53,7 +50,7 @@ describe("machine markdown builders", () => {
       "I've always wanted to start a blog. I think it's a good way to document my thoughts and share ideas with others.",
     );
     expect(markdown).toContain(
-      'It\'s surprising difficult to create a blogging website from scratch and even more difficult to write good blog posts.',
+      "It's surprising difficult to create a blogging website from scratch and even more difficult to write good blog posts.",
     );
     expect(markdown).toContain("*--Windsor*");
     expect(markdown).not.toContain("definePost");
