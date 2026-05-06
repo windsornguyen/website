@@ -8,12 +8,9 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
 /build
+/.output
 
 # misc
 .DS_Store
@@ -30,13 +27,21 @@ yarn-error.log*
 
 # vercel
 .vercel
+.tanstack/
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
-
-# Million Lint
-.million
 
 # HTTPS certificates
 certificates/
+
+# lychee cache
+.lycheecache
+
+# supabase local data
+.supabase
+
+# generated llms.txt files (build artifact)
+public/llms.txt
+public/llms-full.txt
+public/blog/*.md

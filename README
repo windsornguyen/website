@@ -1,0 +1,43 @@
+============
+Introduction
+============
+
+Personal site and blog at https://windsornguyen.com.
+
+Built with TanStack Start, Vite, and Nitro; MDX for content; Supabase for
+view counts.
+
+==========
+Running it
+==========
+
+-------------
+Prerequisites
+-------------
+
+- Node 22 or newer
+- pnpm 10 or newer
+- Supabase CLI (only for `pnpm db` commands)
+- SUPABASE_URL and SUPABASE_SECRET_KEY in the environment
+
+---------
+Procedure
+---------
+
+ $ pnpm install
+ $ pnpm dev
+
+Open http://localhost:3000.
+
+===========
+Conventions
+===========
+
+Repo conventions (MDX shape, design tokens, env files, CSS specificity)
+live in AGENTS.md.
+
+=======
+License
+=======
+
+MIT.

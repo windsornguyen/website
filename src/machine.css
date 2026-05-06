@@ -1,0 +1,47 @@
+/* Copyright (c) 2026 Windsor Nguyen. MIT License. */
+
+/*
+ * Machine mode: VT100 terminal aesthetic.
+ *
+ * Strategy: override the semantic CSS vars so the token system flips
+ * the entire palette. Terminal font + weight only on the content <pre>,
+ * not the layout containers (preserves max-w-[60ch] measurement).
+ */
+
+/* --- Palette override (all semantic tokens flip at once) --- */
+.machine {
+  --fg: var(--color-machine-fg);
+  --fg-emphasis: var(--color-machine-fg);
+  --fg-secondary: var(--color-machine-fg);
+  --fg-muted: color-mix(in srgb, var(--color-machine-fg) 50%, transparent);
+  --fg-ghost: color-mix(in srgb, var(--color-machine-fg) 30%, transparent);
+  --surface: var(--color-machine-bg);
+  --surface-hover: color-mix(in srgb, var(--color-machine-fg) 10%, var(--color-machine-bg));
+  --surface-active: color-mix(in srgb, var(--color-machine-fg) 8%, transparent);
+  --edge: color-mix(in srgb, var(--color-machine-fg) 25%, transparent);
+  --link-line: color-mix(in srgb, var(--color-machine-fg) 50%, transparent);
+  --link-line-hover: var(--color-machine-fg);
+}
+
+/* --- Terminal font + weight only on the markdown content --- */
+.machine .machine-pre {
+  font-family: "Courier New", "Courier", "Lucida Console", monospace;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.7;
+  letter-spacing: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* --- Hide nav chrome that's irrelevant in terminal view --- */
+.machine nav a[href="/"],
+.machine button[aria-label="Toggle theme"] {
+  display: none;
+}
+
+.machine nav {
+  justify-content: flex-end;
+}

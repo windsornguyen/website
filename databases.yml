@@ -1,0 +1,17 @@
+# Database environment configuration.
+# Local uses supabase CLI; remote envs use SUPABASE_DB_URL.
+
+environments:
+  local:
+    project_id: website
+    api_port: 54321
+    db_port: 54322
+
+  preview:
+    # Wired via SUPABASE_DB_URL in Vercel preview environment.
+    # Set SUPABASE_DB_URL in .env.preview or Vercel dashboard.
+
+  production:
+    project_ref: eqxmqnhoupocncjcbwme
+    # Wired via SUPABASE_DB_URL in Vercel production environment.
+    # Set SUPABASE_DB_URL in .env.production or Vercel dashboard.
