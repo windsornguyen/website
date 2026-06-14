@@ -30,7 +30,13 @@ export default defineConfig({
     trailingComma: "all",
     endOfLine: "lf",
     experimentalTailwindcss: {},
-    ignorePatterns: ["README", "content/blog/*.mdx", "public/blog/*.md", "src/routeTree.gen.ts"],
+    ignorePatterns: [
+      "CHANGELOG.md",
+      "README",
+      "content/blog/*.mdx",
+      "public/blog/*.md",
+      "src/routeTree.gen.ts",
+    ],
   },
   plugins: [
     nitro({ rollupConfig: { external: [/^@sentry\//] } }),
