@@ -1,5 +1,6 @@
 # Database environment configuration.
-# Local uses supabase CLI; remote envs use SUPABASE_DB_URL.
+# Local Supabase runs in the Apple-native microVM environment; remote envs use
+# SUPABASE_DB_URL.
 
 environments:
   local:

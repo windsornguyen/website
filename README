@@ -17,8 +17,42 @@ Prerequisites
 
 - Node 22 or newer
 - pnpm 10 or newer
-- Supabase CLI (only for `pnpm db` commands)
+- Rust/Cargo, for installing the Apple-native microVM runner
+- microVM runner, installed from crates.io:
+
+  $ cargo install microvm --version 0.0.1-alpha.1 --locked
+  $ microvm version
+
+- Supabase CLI, installed as this project's exact dev dependency by `pnpm install`
 - SUPABASE_URL and SUPABASE_SECRET_KEY in the environment
+
+-------------------
+Local Supabase mock
+-------------------
+
+Supabase documents local development as `supabase init` followed by
+`supabase start`:
+
+ https://supabase.com/docs/guides/local-development/cli/getting-started
+
+This repo already has a committed `supabase/` directory, so use the
+project-local CLI through `pnpm db`.
+
+Officially, the Supabase CLI expects a Docker-compatible container runtime for
+the local stack. For this repo, provide that runtime with the Apple
+Virtualization.framework microVM runner instead of Docker Desktop; the microVM
+gives us a lighter macOS-native database runtime for the website to connect to.
+
+The current public Dedalus CLI install path is Homebrew:
+
+ $ brew install dedalus-labs/tap/dedalus
+ $ dedalus --version
+
+Then start and verify the local Supabase mock:
+
+ $ pnpm db start
+ $ pnpm db status
+ $ pnpm db reset --execute
 
 ---------
 Procedure
