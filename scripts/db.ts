@@ -1,7 +1,7 @@
 #!/usr/bin/env -S tsx
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
-import { spawnSync } from "node:child_process";
+import { spawnSync, type SpawnSyncReturns } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { cac } from "cac";
 
@@ -24,8 +24,7 @@ function run(program: string, args: string[] = []) {
     return;
   }
 
-  const exitCode = result.status ?? 1;
-  throw new Error(`Command failed with exit code ${exitCode}: ${formatCommand(program, args)}`);
+  throwCommandFailure(program, args, result);
 }
 
 function readCommandOutput(program: string, args: string[]): string {
@@ -40,6 +39,18 @@ function readCommandOutput(program: string, args: string[]): string {
 
   if (result.stderr) {
     process.stderr.write(result.stderr);
+  }
+
+  throwCommandFailure(program, args, result);
+}
+
+function throwCommandFailure(
+  program: string,
+  args: string[],
+  result: SpawnSyncReturns<string | Buffer>,
+): never {
+  if (result.error) {
+    throw new Error(`Missing required command: ${program}`);
   }
 
   const exitCode = result.status ?? 1;
