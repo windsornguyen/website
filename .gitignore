@@ -27,7 +27,7 @@ yarn-error.log*
 
 # vercel
 .vercel
-.tanstack/
+.react-router/
 
 # typescript
 *.tsbuildinfo

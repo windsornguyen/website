@@ -34,7 +34,7 @@ test.before(async () => {
     stdio: "inherit",
   });
 
-  serverProcess = spawn("node", [".output/server/index.mjs"], {
+  serverProcess = spawn("pnpm", ["start"], {
     cwd: process.cwd(),
     env: {
       ...process.env,
@@ -59,7 +59,7 @@ test("homepage renders the personal site content", async () => {
   const html = await fetch(`${serverUrl}/`).then((response) => response.text());
 
   assert.match(html, /Windsor Nguyen/);
-  assert.match(html, /princeton/);
+  assert.match(html, /One year at Dedalus/);
   assert.match(html, /\/blog\/first-post/);
   assert.match(html, /\/blog\/reflecting-on-2024/);
 });
@@ -71,11 +71,15 @@ test("blog posts render through the dynamic blog route", async () => {
   const reflectionHtml = await fetch(`${serverUrl}/blog/reflecting-on-2024`).then((response) =>
     response.text(),
   );
+  const dedalusHtml = await fetch(`${serverUrl}/blog/one-year-at-dedalus`).then((response) =>
+    response.text(),
+  );
 
   assert.match(firstPostHtml, /first post/);
   assert.match(firstPostHtml, /wanted to start a blog/);
   assert.match(reflectionHtml, /reflecting on 2024/);
   assert.match(reflectionHtml, /Get at least/);
+  assert.match(dedalusHtml, /Princeton dorm room/);
 });
 
 test("robots and sitemap are exposed", async () => {

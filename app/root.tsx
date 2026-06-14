@@ -3,7 +3,16 @@
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { HeadContent, Link, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
+import {
+  isRouteErrorResponse,
+  Link,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useRouteError,
+} from "react-router";
 
 import { CommandMenuProvider } from "@/components/command-menu";
 import Footer from "@/components/footer";
@@ -11,47 +20,77 @@ import { MachineModeProvider, useMachineMode } from "@/components/machine-mode";
 import MachineView from "@/components/machine-view";
 import SiteChrome from "@/components/site-chrome";
 import { ThemeProvider, useTheme } from "@/components/theme-provider";
-import { siteMetadata } from "../lib/site";
+import { siteMetadata } from "@/src/lib/site";
+import appCss from "@/src/styles.css?url";
 
-import appCss from "../styles.css?url";
+import { buildPageMeta } from "./meta";
 
-const gaId = process.env.GA_ID ?? import.meta.env.VITE_GA_ID;
+const gaId = import.meta.env.VITE_GA_ID;
 
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: siteMetadata.title },
-      { name: "description", content: siteMetadata.description },
-      { property: "og:title", content: siteMetadata.title },
-      { property: "og:description", content: siteMetadata.description },
-      { property: "og:url", content: siteMetadata.siteUrl },
-      { property: "og:site_name", content: siteMetadata.title },
-      { property: "og:image", content: `${siteMetadata.siteUrl}/opengraph-image.png` },
-      { property: "og:image:alt", content: "Pixelated Windsor Nguyen with a blue background" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: siteMetadata.twitterHandle },
-      { name: "twitter:creator", content: siteMetadata.twitterHandle },
-      { name: "twitter:image", content: `${siteMetadata.siteUrl}/opengraph-image.png` },
-      { name: "twitter:image:alt", content: "Pixelated Windsor Nguyen with a blue background" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico" },
-      { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
-      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
-    ],
-  }),
-  component: RootComponent,
-  notFoundComponent: NotFoundPage,
-});
+export function links() {
+  return [
+    { rel: "stylesheet", href: appCss },
+    { rel: "icon", href: "/favicon.ico" },
+    { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+    { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+  ];
+}
 
-function RootComponent() {
+export function meta() {
+  return buildPageMeta({
+    canonicalPath: "/",
+    description: siteMetadata.description,
+    title: siteMetadata.title,
+  });
+}
+
+export function Layout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <RootDocument>
-      <RootLayout />
-    </RootDocument>
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {gaId ? <GoogleAnalyticsScripts gaId={gaId} /> : null}
+        <Meta />
+        <Links />
+      </head>
+      <body className="antialiased" style={{ letterSpacing: 0 }}>
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export default function App() {
+  return <RootLayout />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return (
+      <RootLayout>
+        <NotFoundPage />
+      </RootLayout>
+    );
+  }
+
+  const message = isRouteErrorResponse(error)
+    ? `${error.status} ${error.statusText}`
+    : error instanceof Error
+      ? error.message
+      : "Unknown route error";
+
+  return (
+    <RootLayout>
+      <main className="space-y-4 pt-12">
+        <h1 className="text-fg text-2xl font-medium">Route error</h1>
+        <p className="text-fg-emphasis leading-snug">{message}</p>
+      </main>
+    </RootLayout>
   );
 }
 
@@ -169,19 +208,19 @@ function Nav() {
   );
 }
 
-function RootLayout() {
+function RootLayout({ children = <Outlet /> }: Readonly<{ children?: ReactNode }>) {
   return (
     <ThemeProvider defaultTheme="system">
       <MachineModeProvider>
         <CommandMenuProvider>
-          <LayoutShell />
+          <LayoutShell>{children}</LayoutShell>
         </CommandMenuProvider>
       </MachineModeProvider>
     </ThemeProvider>
   );
 }
 
-function LayoutShell() {
+function LayoutShell({ children }: Readonly<{ children: ReactNode }>) {
   const { machine } = useMachineMode();
 
   return (
@@ -190,13 +229,7 @@ function LayoutShell() {
         <Nav />
       </header>
       <main className="mx-auto w-full max-w-[60ch] flex-1 pt-1">
-        {machine ? (
-          <MachineView />
-        ) : (
-          <SiteChrome>
-            <Outlet />
-          </SiteChrome>
-        )}
+        {machine ? <MachineView /> : <SiteChrome>{children}</SiteChrome>}
       </main>
       {!machine && <Footer />}
       <Analytics />
@@ -214,21 +247,6 @@ function NotFoundPage() {
         Go Home
       </Link>
     </main>
-  );
-}
-
-function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  return (
-    <html lang="en">
-      <head>
-        {gaId ? <GoogleAnalyticsScripts gaId={gaId} /> : null}
-        <HeadContent />
-      </head>
-      <body className="antialiased" style={{ letterSpacing: "-0.011em" }}>
-        {children}
-        <Scripts />
-      </body>
-    </html>
   );
 }
 

@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "**/*.mdx", "vite.config.ts"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.mdx", ".react-router/types/**/*", "vite.config.ts"],
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
@@ -7,6 +7,7 @@
       "@/*": ["./*"]
     },
     "types": ["vite/client"],
+    "rootDirs": [".", "./.react-router/types"],
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "bundler",
