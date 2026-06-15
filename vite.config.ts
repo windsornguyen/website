@@ -5,7 +5,7 @@ import mdx from "@mdx-js/rollup";
 import { reactRouter } from "@react-router/dev/vite";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
-import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite-plus";
 
 const codeHikeConfig = {
@@ -60,7 +60,6 @@ export default defineConfig({
     })(),
     tailwindcss(),
     reactRouter(),
-    viteReact(),
     babel({
       exclude: [/\.mdx?$/],
       presets: [reactCompilerPreset()],
