@@ -19,6 +19,7 @@ exclude = [
   "^https://twitter\\.com/",
   "^https://linkedin\\.com/",
   "^https://www\\.linkedin\\.com/",
+  "^https://(www\\.)?windsornguyen\\.com/",
   "^mailto:",
   "^https://localhost",
   "^http://localhost",

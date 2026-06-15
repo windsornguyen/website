@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm build",
+  "devCommand": "pnpm dev",
+  "framework": "react-router",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "outputDirectory": "",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/remix-builder",
+      "config": {
+        "buildCommand": "pnpm build",
+        "framework": "react-router",
+        "installCommand": "pnpm install --frozen-lockfile"
+      }
+    }
+  ]
+}

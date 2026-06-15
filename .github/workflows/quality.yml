@@ -75,6 +75,68 @@ jobs:
       - name: Build
         run: pnpm build
 
+  vercel-build:
+    name: Vercel Build
+    runs-on: ubuntu-latest
+    needs: [build]
+    env:
+      VERCEL_CLI_VERSION: 54.14.0
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Check Vercel CI credentials
+        id: vercel-credentials
+        run: |
+          if [ -z "${VERCEL_TOKEN}" ] || [ -z "${VERCEL_ORG_ID}" ] || [ -z "${VERCEL_PROJECT_ID}" ]; then
+            echo "::notice title=Vercel build skipped::Set VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID to enable this deployment gate."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "enabled=true" >> "$GITHUB_OUTPUT"
+
+      - name: Pull Vercel project settings
+        if: steps.vercel-credentials.outputs.enabled == 'true'
+        run: npx -y "vercel@${VERCEL_CLI_VERSION}" pull --yes --environment=production --token="${VERCEL_TOKEN}"
+
+      - name: Build Vercel output
+        if: steps.vercel-credentials.outputs.enabled == 'true'
+        run: npx -y "vercel@${VERCEL_CLI_VERSION}" build --prod --token="${VERCEL_TOKEN}"
+
+      - name: Assert React Router SSR output
+        if: steps.vercel-credentials.outputs.enabled == 'true'
+        run: |
+          config=.vercel/output/functions/index.func/.vc-config.json
+          test -f "$config"
+          node <<'NODE'
+          const fs = require("node:fs");
+          const config = JSON.parse(
+            fs.readFileSync(".vercel/output/functions/index.func/.vc-config.json", "utf8"),
+          );
+
+          if (config.operationType !== "SSR") {
+            throw new Error(`Expected Vercel SSR output, got ${config.operationType}`);
+          }
+
+          if (config.framework?.slug !== "react-router") {
+            throw new Error(`Expected React Router framework, got ${config.framework?.slug}`);
+          }
+
+          if (config.runtime !== "nodejs22.x") {
+            throw new Error(`Expected nodejs22.x runtime, got ${config.runtime}`);
+          }
+          NODE
+
   links:
     name: Link Check
     runs-on: ubuntu-latest
