@@ -7,10 +7,8 @@
  * All database access goes through this client from server routes; the
  * browser never sees Supabase keys.
  *
- * Lazily initialized: env validation happens on first call, not at module
- * load. TanStack Start eagerly imports every route file at server boot, so
- * a module-level throw here would take down the entire dev server even for
- * pages that never touch the database.
+ * Lazily initialized: env validation happens on first database call, so
+ * non-database routes and tests do not require service-role configuration.
  */
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";

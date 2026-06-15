@@ -4,8 +4,7 @@ Introduction
 
 Personal site and blog at https://windsornguyen.com.
 
-Built with TanStack Start, Vite, and Nitro; MDX for content; Supabase for
-view counts.
+Built with React Router framework mode, Vite, MDX, CodeHike, and Supabase.
 
 ==========
 Running it

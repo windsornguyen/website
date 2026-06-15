@@ -33,7 +33,7 @@ jobs:
         run: pnpm exec oxlint --deny-warnings
 
       - name: markdownlint
-        run: pnpm exec markdownlint-cli2 '**/*.{md,mdx}' '#node_modules' '#.output' '#build' '#dist'
+        run: pnpm exec markdownlint-cli2 '**/*.{md,mdx}' '#node_modules' '#build' '#dist' '#CHANGELOG.md'
 
       - name: Format check (oxfmt)
         run: pnpm check-format

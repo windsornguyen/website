@@ -16,6 +16,9 @@ const codeHikeConfig = {
 };
 
 export default defineConfig({
+  define: {
+    __VERCEL_BUILD__: JSON.stringify(process.env.VERCEL === "1"),
+  },
   resolve: {
     tsconfigPaths: true,
   },
@@ -29,7 +32,7 @@ export default defineConfig({
     trailingComma: "all",
     endOfLine: "lf",
     experimentalTailwindcss: {},
-    ignorePatterns: ["README", "content/blog/*.mdx", "public/blog/*.md"],
+    ignorePatterns: ["README", "CHANGELOG.md", "content/blog/*.mdx", "public/blog/*.md"],
   },
   plugins: [
     (() => {
