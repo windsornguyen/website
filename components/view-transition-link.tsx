@@ -2,7 +2,7 @@
 
 import type { AnchorHTMLAttributes, MouseEvent, ReactNode } from "react";
 
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router";
 
 type ViewTransitionLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   children: ReactNode;
@@ -52,7 +52,7 @@ export default function ViewTransitionLink({
         event.preventDefault();
 
         const runNavigation = () => {
-          void navigate({ to });
+          void navigate(to);
         };
 
         const viewTransitionDocument = document as ViewTransitionDocument;

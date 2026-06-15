@@ -2,11 +2,10 @@
 
 import { recmaCodeHike, remarkCodeHike } from "codehike/mdx";
 import mdx from "@mdx-js/rollup";
+import { reactRouter } from "@react-router/dev/vite";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
-import { nitro } from "nitro/vite";
+import { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite-plus";
 
 const codeHikeConfig = {
@@ -17,6 +16,9 @@ const codeHikeConfig = {
 };
 
 export default defineConfig({
+  define: {
+    __VERCEL_BUILD__: JSON.stringify(process.env.VERCEL === "1"),
+  },
   resolve: {
     tsconfigPaths: true,
   },
@@ -30,11 +32,9 @@ export default defineConfig({
     trailingComma: "all",
     endOfLine: "lf",
     experimentalTailwindcss: {},
-    ignorePatterns: ["README", "content/blog/*.mdx", "public/blog/*.md", "src/routeTree.gen.ts"],
+    ignorePatterns: ["README", "CHANGELOG.md", "content/blog/*.mdx", "public/blog/*.md"],
   },
   plugins: [
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
-    tailwindcss(),
     (() => {
       const mdxPlugin = mdx({
         remarkPlugins: [[remarkCodeHike, codeHikeConfig]],
@@ -58,15 +58,8 @@ export default defineConfig({
         },
       };
     })(),
-    tanstackStart({
-      prerender: {
-        enabled: true,
-        autoSubfolderIndex: true,
-        crawlLinks: true,
-        failOnError: true,
-      },
-    }),
-    viteReact(),
+    tailwindcss(),
+    reactRouter(),
     babel({
       exclude: [/\.mdx?$/],
       presets: [reactCompilerPreset()],

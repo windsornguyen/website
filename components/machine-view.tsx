@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
-import { useLocation } from "@tanstack/react-router";
+import { useLocation } from "react-router";
 
 import { parseBlogSlug } from "@/content/schema";
 import { getAllPosts, getPostBySlug } from "@/src/lib/content";

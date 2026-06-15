@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { useLocation } from "@tanstack/react-router";
+import { useLocation } from "react-router";
 
 import { useCommandMenu } from "@/components/command-menu";
 import ViewTransitionLink from "@/components/view-transition-link";

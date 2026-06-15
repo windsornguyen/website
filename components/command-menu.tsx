@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Command } from "cmdk";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router";
 
 import { getAllPosts } from "@/src/lib/content";
 
@@ -56,7 +56,7 @@ function CommandMenuDialog({
 
   function go(to: string) {
     onOpenChange(false);
-    void navigate({ to });
+    void navigate(to);
   }
 
   return (

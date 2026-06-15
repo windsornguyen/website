@@ -10,7 +10,6 @@
 
 # production
 /build
-/.output
 
 # misc
 .DS_Store
@@ -27,7 +26,7 @@ yarn-error.log*
 
 # vercel
 .vercel
-.tanstack/
+.react-router/
 
 # typescript
 *.tsbuildinfo

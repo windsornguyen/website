@@ -1,9 +1,7 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
-import { createFileRoute } from "@tanstack/react-router";
-
-import { getAllPosts } from "../lib/content";
-import { siteMetadata } from "../lib/site";
+import { getAllPosts } from "@/src/lib/content";
+import { siteMetadata } from "@/src/lib/site";
 
 function buildSitemapXml() {
   const staticUrls = [
@@ -35,15 +33,10 @@ ${body}
 </urlset>`;
 }
 
-export const Route = createFileRoute("/sitemap.xml")({
-  server: {
-    handlers: {
-      GET: () =>
-        new Response(buildSitemapXml(), {
-          headers: {
-            "Content-Type": "application/xml; charset=utf-8",
-          },
-        }),
+export function loader() {
+  return new Response(buildSitemapXml(), {
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
     },
-  },
-});
+  });
+}
