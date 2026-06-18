@@ -16,9 +16,6 @@ const codeHikeConfig = {
 };
 
 export default defineConfig({
-  define: {
-    __VERCEL_BUILD__: JSON.stringify(process.env.VERCEL === "1"),
-  },
   resolve: {
     tsconfigPaths: true,
   },

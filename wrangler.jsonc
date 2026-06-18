@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "windsornguyen-com",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-06-17",
+  "assets": {
+    "directory": "./build/client",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none",
+    "run_worker_first": ["/api/*"],
+  },
+  "observability": {
+    "enabled": true,
+  },
+}

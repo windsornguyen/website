@@ -15,6 +15,7 @@ max_redirects = 10
 exclude_all_private = true
 
 exclude = [
+  "^https://windsornguyen\\.com/?$",
   "^https://x\\.com/",
   "^https://twitter\\.com/",
   "^https://linkedin\\.com/",

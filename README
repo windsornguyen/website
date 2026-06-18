@@ -4,7 +4,8 @@ Introduction
 
 Personal site and blog at https://windsornguyen.com.
 
-Built with React Router framework mode, Vite, MDX, CodeHike, and Supabase.
+Built with React Router framework mode, Vite, MDX, CodeHike, Supabase, and
+Cloudflare Workers static assets.
 
 ==========
 Running it
@@ -17,7 +18,7 @@ Prerequisites
 - Node 22 or newer
 - pnpm 10 or newer
 - Supabase CLI (only for `pnpm db` commands)
-- SUPABASE_URL and SUPABASE_SECRET_KEY in the environment
+- SUPABASE_URL and SUPABASE_SECRET_KEY in `.dev.vars` for the Worker API
 
 ---------
 Procedure
@@ -26,7 +27,27 @@ Procedure
  $ pnpm install
  $ pnpm dev
 
-Open http://localhost:3000.
+`pnpm dev` runs the React Router development server for content iteration.
+To test the Cloudflare deployment shape locally:
+
+ $ pnpm build
+ $ pnpm preview
+
+That serves prerendered static assets from `build/client` and routes
+`/api/views/:slug` through the Worker at http://127.0.0.1:3000.
+
+----------
+Deployment
+----------
+
+Set the Supabase bindings once per Cloudflare Worker:
+
+ $ pnpm exec wrangler secret put SUPABASE_URL
+ $ pnpm exec wrangler secret put SUPABASE_SECRET_KEY
+
+Then deploy:
+
+ $ pnpm deploy
 
 ===========
 Conventions
