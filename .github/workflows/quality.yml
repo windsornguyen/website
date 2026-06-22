@@ -46,6 +46,20 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: TypeScript
         run: pnpm typecheck
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+        with:
+          terraform_wrapper: false
+      - name: Terraform fmt
+        run: terraform -chdir=infra/cloudflare fmt -check -recursive
+      - name: Terraform init
+        run: terraform -chdir=infra/cloudflare init -backend=false
+      - name: Terraform validate
+        run: terraform -chdir=infra/cloudflare validate
   build:
     name: Build & Cloudflare Bundle
     runs-on: ubuntu-24.04

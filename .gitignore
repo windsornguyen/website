@@ -32,6 +32,15 @@ yarn-error.log*
 .wrangler/
 .dev.vars
 
+# terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+*.local.backend.hcl
+
 # typescript
 *.tsbuildinfo
 
