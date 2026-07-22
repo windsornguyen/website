@@ -1,10 +1,8 @@
 import {
-  and,
   eq,
   format,
   github,
   job,
-  secret,
   workflow,
   type GitHubRunStep,
   type GitHubWorkflowStep,
@@ -51,7 +49,6 @@ const setup = (): readonly GitHubWorkflowStep[] => [
 ];
 
 const isPullRequest = eq(github.eventName, "pull_request");
-const isMainPush = and(eq(github.eventName, "push"), eq(github.ref, "refs/heads/main"));
 
 export const quality = workflow({
   name: "Website: CI/CD",
@@ -168,39 +165,6 @@ export const quality = workflow({
             args: "--config lychee.toml content/ README",
             fail: true,
           },
-        },
-      ],
-    }),
-    deploy: job({
-      name: "Deploy / Production",
-      "runs-on": ubuntu,
-      if: isMainPush,
-      needs: ["lint", "typecheck", "terraform", "test"],
-      environment: {
-        name: "Production",
-        url: "https://windsornguyen.com",
-      },
-      env: {
-        CLOUDFLARE_ACCOUNT_ID: secret("CLOUDFLARE_ACCOUNT_ID"),
-        CLOUDFLARE_API_TOKEN: secret("CLOUDFLARE_API_TOKEN"),
-      },
-      steps: [
-        ...setup(),
-        {
-          name: "Smoke built site",
-          run: "pnpm test:smoke",
-        },
-        {
-          name: "Cloudflare bundle dry run",
-          run: "pnpm check:cloudflare",
-        },
-        {
-          name: "Deploy Worker",
-          run: 'pnpm exec wrangler deploy --strict --tag "$GITHUB_SHA" --message "$GITHUB_SHA"',
-        },
-        {
-          name: "Smoke live deployment",
-          run: "SITE_URL=https://windsornguyen.com node --test tests/site-live.smoke.mjs",
         },
       ],
     }),

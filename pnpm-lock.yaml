@@ -59,8 +59,8 @@ importers:
         specifier: ^4.20260617.1
         version: 4.20260617.1
       '@dedalus-labs/hollywood':
-        specifier: 0.0.1-alpha.0
-        version: 0.0.1-alpha.0
+        specifier: 0.0.1
+        version: 0.0.1
       '@mdx-js/rollup':
         specifier: ^3.1.1
         version: 3.1.1(rollup@4.59.1)
@@ -341,9 +341,9 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@dedalus-labs/hollywood@0.0.1-alpha.0':
-    resolution: {integrity: sha512-pt4oqo1etTU08UaNStmRCcfMTCGH3gEqsOErCSYxCtdfoltrHpjFBb5mdyH4rH5O0hRwMhMm0/70i5FE1L+jhA==}
-    engines: {node: '>=24'}
+  '@dedalus-labs/hollywood@0.0.1':
+    resolution: {integrity: sha512-J64EBEuk7eGcl62BpeN86HYbNassxnR8/NjUN8CjWpqI7BlMqzKhGAgY016/TzqBzXnw1drIuSHJAUZ7Zy3JWg==}
+    engines: {node: '>=20'}
     hasBin: true
 
   '@emnapi/core@1.10.0':
@@ -4005,7 +4005,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@dedalus-labs/hollywood@0.0.1-alpha.0':
+  '@dedalus-labs/hollywood@0.0.1':
     dependencies:
       '@actions/core': 3.0.1
       '@actions/exec': 3.0.0
