@@ -13,7 +13,7 @@
     "site": "tsx scripts/site.ts",
     "ship": "bash scripts/ship.sh",
     "db": "tsx scripts/db.ts",
-    "test": "vp test --run",
+    "test": "pnpm llms && vp test --run",
     "test:smoke": "node --test tests/site-smoke.smoke.mjs",
     "lint": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\"",
     "format": "vp fmt --write .",
@@ -23,7 +23,7 @@
     "infra:check": "terraform -chdir=infra/cloudflare fmt -check -recursive && terraform -chdir=infra/cloudflare init -backend=false && terraform -chdir=infra/cloudflare validate",
     "workflows": "hollywood generate --source-root ci --workflows-dir .github/workflows \"ci/*.ts\"",
     "check:workflows": "hollywood check --generated --workflow-security --source-root ci --workflows-dir .github/workflows",
-    "check:cloudflare": "wrangler deploy --dry-run --outdir .wrangler/tmp",
+    "check:cloudflare": "wrangler deploy --dry-run --strict --outdir .wrangler/tmp",
     "check": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\" && pnpm check-format && pnpm typecheck && pnpm check:workflows",
     "check:vp": "vp check ."
   },

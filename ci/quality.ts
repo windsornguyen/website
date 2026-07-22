@@ -1,7 +1,10 @@
 import {
+  and,
   eq,
+  format,
   github,
   job,
+  secret,
   workflow,
   type GitHubRunStep,
   type GitHubWorkflowStep,
@@ -14,7 +17,12 @@ const pnpmSetupV4 = "pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1"
 const setupNodeV4 = "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020";
 const lycheeV2 = "lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411";
 
-const checkout = (): GitHubWorkflowStep => ({ uses: checkoutV4 });
+const checkout = (): GitHubWorkflowStep => ({
+  uses: checkoutV4,
+  with: {
+    "persist-credentials": false,
+  },
+});
 
 const setupTerraform = (): GitHubWorkflowStep => ({
   uses: setupTerraformV4,
@@ -42,15 +50,20 @@ const setup = (): readonly GitHubWorkflowStep[] => [
   install(),
 ];
 
+const isPullRequest = eq(github.eventName, "pull_request");
+const isMainPush = and(eq(github.eventName, "push"), eq(github.ref, "refs/heads/main"));
+
 export const quality = workflow({
-  name: "Quality",
+  name: "Website: CI/CD",
   on: {
     push: {
       branches: ["main"],
     },
-    pull_request: {
-      branches: ["main"],
-    },
+    pull_request: {},
+  },
+  concurrency: {
+    group: format("{0}-{1}", github.workflow, github.ref),
+    "cancel-in-progress": isPullRequest,
   },
   permissions: {
     contents: "read",
@@ -61,7 +74,7 @@ export const quality = workflow({
   },
   jobs: {
     lint: job({
-      name: "Lint & Format",
+      name: "Quality / Lint & Format",
       "runs-on": ubuntu,
       steps: [
         ...setup(),
@@ -84,7 +97,7 @@ export const quality = workflow({
       ],
     }),
     typecheck: job({
-      name: "Type Check",
+      name: "Quality / Type Check",
       "runs-on": ubuntu,
       steps: [
         ...setup(),
@@ -95,7 +108,7 @@ export const quality = workflow({
       ],
     }),
     terraform: job({
-      name: "Terraform",
+      name: "Infrastructure / Terraform",
       "runs-on": ubuntu,
       steps: [
         checkout(),
@@ -114,15 +127,27 @@ export const quality = workflow({
         },
       ],
     }),
-    build: job({
-      name: "Build & Cloudflare Bundle",
+    test: job({
+      name: "Test / Unit",
       "runs-on": ubuntu,
-      needs: ["lint", "typecheck"],
       steps: [
         ...setup(),
         {
-          name: "Build",
-          run: "pnpm build",
+          name: "Vitest",
+          run: "pnpm test",
+        },
+      ],
+    }),
+    build: job({
+      name: "Build / Smoke & Bundle",
+      "runs-on": ubuntu,
+      if: isPullRequest,
+      needs: ["lint", "typecheck", "test"],
+      steps: [
+        ...setup(),
+        {
+          name: "Smoke built site",
+          run: "pnpm test:smoke",
         },
         {
           name: "Cloudflare bundle dry run",
@@ -131,9 +156,9 @@ export const quality = workflow({
       ],
     }),
     links: job({
-      name: "Link Check",
+      name: "Quality / Links",
       "runs-on": ubuntu,
-      if: eq(github.eventName, "pull_request"),
+      if: isPullRequest,
       steps: [
         checkout(),
         {
@@ -143,6 +168,39 @@ export const quality = workflow({
             args: "--config lychee.toml content/ README",
             fail: true,
           },
+        },
+      ],
+    }),
+    deploy: job({
+      name: "Deploy / Production",
+      "runs-on": ubuntu,
+      if: isMainPush,
+      needs: ["lint", "typecheck", "terraform", "test"],
+      environment: {
+        name: "Production",
+        url: "https://windsornguyen.com",
+      },
+      env: {
+        CLOUDFLARE_ACCOUNT_ID: secret("CLOUDFLARE_ACCOUNT_ID"),
+        CLOUDFLARE_API_TOKEN: secret("CLOUDFLARE_API_TOKEN"),
+      },
+      steps: [
+        ...setup(),
+        {
+          name: "Smoke built site",
+          run: "pnpm test:smoke",
+        },
+        {
+          name: "Cloudflare bundle dry run",
+          run: "pnpm check:cloudflare",
+        },
+        {
+          name: "Deploy Worker",
+          run: 'pnpm exec wrangler deploy --strict --tag "$GITHUB_SHA" --message "$GITHUB_SHA"',
+        },
+        {
+          name: "Smoke live deployment",
+          run: "SITE_URL=https://windsornguyen.com node --test tests/site-live.smoke.mjs",
         },
       ],
     }),
