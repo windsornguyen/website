@@ -25,5 +25,6 @@ export default {
     paths: prerenderPaths,
     concurrency: 4,
   },
+  routeDiscovery: { mode: "initial" },
   ssr: true,
 } satisfies Config;
