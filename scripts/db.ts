@@ -79,7 +79,7 @@ cli
   });
 
 cli
-  .command("diff", "Generate a migration from declarative schema diff")
+  .command("diff", "Generate a migration from the declarative schema")
   .option("--name <name>", "Migration name (required)")
   .option("--execute", "Write the migration file (dry-run by default)")
   .action((options: { name?: string; execute?: boolean }) => {
@@ -88,7 +88,16 @@ cli
     }
 
     if (options.execute) {
-      run("supabase", ["db", "diff", diffEngine, "-f", options.name]);
+      // --no-apply writes the file only; `pnpm db migrate` applies it.
+      run("supabase", [
+        "db",
+        "schema",
+        "declarative",
+        "sync",
+        "--no-apply",
+        "--name",
+        options.name,
+      ]);
       success(`Created migration: ${options.name}`);
     } else {
       info("Schema diff (dry run):");

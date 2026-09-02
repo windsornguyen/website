@@ -53,14 +53,6 @@ max_client_conn = 100
 [db.migrations]
 # If disabled, migrations will be skipped during a db push or reset.
 enabled = true
-# Specifies an ordered list of schema files that describe your database.
-# Supports glob patterns relative to supabase directory: "./schemas/*.sql"
-schema_paths = [
-  "./schemas/extensions.sql",
-  "./schemas/public/tables/page_views.sql",
-  "./schemas/public/functions/increment_page_view.sql",
-  "./schemas/_shared/rls.sql",
-]
 
 [db.seed]
 # If enabled, seeds the database after migrations during a db reset.
@@ -387,3 +379,10 @@ s3_region = "env(S3_REGION)"
 s3_access_key = "env(S3_ACCESS_KEY)"
 # Configures AWS_SECRET_ACCESS_KEY for S3 bucket
 s3_secret_key = "env(S3_SECRET_KEY)"
+
+[experimental.pgdelta]
+# Declarative schema workflow backed by pg-delta. Alpha, but Supabase's stated
+# end state: pg-delta becomes the default engine and these commands graduate.
+# Schema lives under ./database (the default); pg-delta orders statements by
+# dependency, so no schema_paths list is needed.
+enabled = true
