@@ -20,7 +20,7 @@
     "check-format": "vp fmt --check .",
     "typecheck": "react-router typegen && tsgo --noEmit",
     "infra:fmt": "terraform -chdir=infra/cloudflare fmt -recursive",
-    "infra:check": "terraform -chdir=infra/cloudflare fmt -check -recursive && terraform -chdir=infra/cloudflare init -backend=false && terraform -chdir=infra/cloudflare validate",
+    "infra:check": "terraform -chdir=infra/cloudflare fmt -check -recursive && TF_DATA_DIR=.terraform/infra-check terraform -chdir=infra/cloudflare init -backend=false -input=false && TF_DATA_DIR=.terraform/infra-check terraform -chdir=infra/cloudflare validate",
     "workflows": "hollywood generate --source-root ci --workflows-dir .github/workflows \"ci/*.ts\"",
     "check:workflows": "hollywood check --generated --workflow-security --source-root ci --workflows-dir .github/workflows",
     "check:cloudflare": "wrangler deploy --dry-run --strict --outdir .wrangler/tmp",
