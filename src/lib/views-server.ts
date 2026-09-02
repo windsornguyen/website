@@ -9,6 +9,7 @@
  */
 
 import type { BlogSlug } from "../../content/schema";
+import type { SupabaseAdminClient } from "./supabase-admin";
 import { getSupabase } from "./supabase";
 
 type PageViewRow = {
@@ -18,7 +19,14 @@ type PageViewRow = {
 type ViewCount = number;
 
 export async function getViewCount(slug: BlogSlug): Promise<ViewCount> {
-  const { data, error } = await getSupabase()
+  return getViewCountWithClient(getSupabase(), slug);
+}
+
+export async function getViewCountWithClient(
+  supabase: SupabaseAdminClient,
+  slug: BlogSlug,
+): Promise<ViewCount> {
+  const { data, error } = await supabase
     .from("page_views")
     .select("count")
     .eq("slug", slug)
@@ -32,7 +40,14 @@ export async function getViewCount(slug: BlogSlug): Promise<ViewCount> {
 }
 
 export async function incrementViewCount(slug: BlogSlug): Promise<ViewCount> {
-  const { data, error } = await getSupabase().rpc("increment_page_view", {
+  return incrementViewCountWithClient(getSupabase(), slug);
+}
+
+export async function incrementViewCountWithClient(
+  supabase: SupabaseAdminClient,
+  slug: BlogSlug,
+): Promise<ViewCount> {
+  const { data, error } = await supabase.rpc("increment_page_view", {
     page_slug: slug,
   });
 

@@ -1,8 +1,6 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
 import type { ReactNode } from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import {
   isRouteErrorResponse,
   Link,
@@ -26,7 +24,6 @@ import appCss from "@/src/styles.css?url";
 import { buildPageMeta } from "./meta";
 
 const gaId = import.meta.env.VITE_GA_ID;
-const enableVercelTelemetry = __VERCEL_BUILD__;
 
 export function links() {
   return [
@@ -233,12 +230,6 @@ function LayoutShell({ children }: Readonly<{ children: ReactNode }>) {
         {machine ? <MachineView /> : <SiteChrome>{children}</SiteChrome>}
       </main>
       {!machine && <Footer />}
-      {enableVercelTelemetry ? (
-        <>
-          <Analytics />
-          <SpeedInsights />
-        </>
-      ) : null}
     </div>
   );
 }

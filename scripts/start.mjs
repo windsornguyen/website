@@ -2,34 +2,18 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 
-const manifestPath = ".vercel/react-router-build-result.json";
+const indexPath = "build/client/index.html";
 
-if (!existsSync(manifestPath)) {
-  throw new Error(`Missing ${manifestPath}. Run "pnpm build" before "pnpm start".`);
+if (!existsSync(indexPath)) {
+  throw new Error(`Missing ${indexPath}. Run "pnpm build" before "pnpm start".`);
 }
 
-const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
-const serverBundles = Object.values(manifest.buildManifest?.serverBundles ?? {});
+const host = process.env.HOST ?? "127.0.0.1";
+const port = process.env.PORT ?? "3000";
 
-if (serverBundles.length !== 1) {
-  throw new Error(
-    `Expected exactly one React Router server bundle, found ${serverBundles.length}.`,
-  );
-}
-
-const [serverBundle] = serverBundles;
-
-if (serverBundle.config?.runtime !== "nodejs") {
-  throw new Error(`Expected a nodejs server bundle, found "${serverBundle.config?.runtime}".`);
-}
-
-if (!existsSync(serverBundle.file)) {
-  throw new Error(`React Router server bundle does not exist: ${serverBundle.file}`);
-}
-
-const server = spawn("react-router-serve", [serverBundle.file], {
+const server = spawn("wrangler", ["dev", "--local", "--ip", host, "--port", port], {
   env: process.env,
   stdio: "inherit",
 });

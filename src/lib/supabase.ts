@@ -1,40 +1,20 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
-/**
- * Supabase admin client.
- *
- * Server-only. Uses the service-role key, so it bypasses RLS by design.
- * All database access goes through this client from server routes; the
- * browser never sees Supabase keys.
- *
- * Lazily initialized: env validation happens on first database call, so
- * non-database routes and tests do not require service-role configuration.
- */
+import { createSupabaseAdmin, type SupabaseAdminClient } from "./supabase-admin";
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+let cached: SupabaseAdminClient | null = null;
 
-type SupabaseAdminConfig = {
-  url: string;
-  secretKey: string;
-};
-
-let cached: SupabaseClient | null = null;
-
-export function getSupabase(): SupabaseClient {
+export function getSupabase(): SupabaseAdminClient {
   if (cached) {
     return cached;
   }
 
-  const config = readSupabaseAdminConfig();
-
-  cached = createClient(config.url, config.secretKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  cached = createSupabaseAdmin(readSupabaseAdminConfig());
 
   return cached;
 }
 
-function readSupabaseAdminConfig(): SupabaseAdminConfig {
+function readSupabaseAdminConfig() {
   const config = {
     url: readRequiredEnv("SUPABASE_URL"),
     secretKey: readRequiredEnv("SUPABASE_SECRET_KEY"),

@@ -28,6 +28,10 @@ yarn-error.log*
 .vercel
 .react-router/
 
+# cloudflare
+.wrangler/
+.dev.vars
+
 # typescript
 *.tsbuildinfo
 
