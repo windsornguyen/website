@@ -19,8 +19,10 @@
     "format": "vp fmt --write .",
     "check-format": "vp fmt --check .",
     "typecheck": "react-router typegen && tsgo --noEmit",
+    "workflows": "hollywood generate --source-root ci --workflows-dir .github/workflows \"ci/*.ts\"",
+    "check:workflows": "hollywood check --generated --workflow-security --source-root ci --workflows-dir .github/workflows",
     "check:cloudflare": "wrangler deploy --dry-run --outdir .wrangler/tmp",
-    "check": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\" && pnpm check-format && pnpm typecheck",
+    "check": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\" && pnpm check-format && pnpm typecheck && pnpm check:workflows",
     "check:vp": "vp check ."
   },
   "dependencies": {
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260617.1",
+    "@dedalus-labs/hollywood": "0.0.1-alpha.0",
     "@mdx-js/rollup": "^3.1.1",
     "@react-router/dev": "7.17.0",
     "@rolldown/plugin-babel": "^0.2.3",
