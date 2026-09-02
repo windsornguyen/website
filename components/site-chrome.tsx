@@ -78,10 +78,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <p
-        className="text-body text-fg-secondary mt-0.5 leading-relaxed"
-        style={{ letterSpacing: "-0.011em" }}
-      >
+      <p className="text-body text-fg mt-0.5 leading-[normal]">
         Co-Founder and CTO of{" "}
         <a
           href="https://dedaluslabs.ai"

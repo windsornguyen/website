@@ -42,17 +42,13 @@ export const mdxComponents: MDXComponents = {
   ),
   h4: (props: HeadingProps) => <h4 className="text-sm font-medium" {...props} />,
   p: (props: ParagraphProps) => (
-    <p
-      className="text-body text-fg-secondary mt-4 leading-relaxed"
-      style={{ letterSpacing: "-0.011em" }}
-      {...props}
-    />
+    <p className="text-body text-fg mt-4 leading-[normal]" {...props} />
   ),
   ol: (props: ListProps) => (
-    <ol className="text-body text-fg-secondary list-decimal space-y-0.5 pl-5" {...props} />
+    <ol className="text-body text-fg list-decimal space-y-0.5 pl-5 leading-[normal]" {...props} />
   ),
   ul: (props: ListProps) => (
-    <ul className="text-body text-fg-secondary list-disc space-y-0.5 pl-5" {...props} />
+    <ul className="text-body text-fg list-disc space-y-0.5 pl-5 leading-[normal]" {...props} />
   ),
   li: (props: ListItemProps) => <li className="pl-0.5" {...props} />,
   em: (props: ComponentPropsWithoutRef<"em">) => <em className="font-medium" {...props} />,
