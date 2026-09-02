@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Windsor Nguyen. MIT License.
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useSyncExternalStore } from "react";
 import type { ReactNode } from "react";
 
 type Theme = "dark" | "light" | "system";
@@ -19,6 +19,19 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
+// localStorage is the source of truth; same-tab writes notify via this set,
+// cross-tab writes arrive through the native "storage" event.
+const listeners = new Set<() => void>();
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  window.addEventListener("storage", listener);
+  return () => {
+    listeners.delete(listener);
+    window.removeEventListener("storage", listener);
+  };
+}
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
@@ -28,14 +41,11 @@ export function ThemeProvider({
   defaultTheme?: Theme;
   storageKey?: string;
 }) {
-  const [theme, setThemeState] = useState<Theme>(defaultTheme);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(storageKey) as Theme | null;
-    if (stored) {
-      setThemeState(stored);
-    }
-  }, [storageKey]);
+  const theme = useSyncExternalStore(
+    subscribe,
+    () => (localStorage.getItem(storageKey) as Theme | null) ?? defaultTheme,
+    () => defaultTheme,
+  );
 
   useEffect(() => {
     const root = document.documentElement;
@@ -63,7 +73,9 @@ export function ThemeProvider({
 
   function setTheme(next: Theme) {
     localStorage.setItem(storageKey, next);
-    setThemeState(next);
+    for (const listener of listeners) {
+      listener();
+    }
   }
 
   return <ThemeContext value={{ theme, setTheme }}>{children}</ThemeContext>;

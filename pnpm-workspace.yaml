@@ -1,12 +1,4 @@
-packages:
-  - .
-
+# Security floor for a transitive dep upstream has not bumped yet.
+# Remove once @react-router/dev's nested vite ships postcss >= 8.5.23.
 overrides:
-  "@babel/core": 7.29.6
-  ajv: 8.18.0
-  esbuild: 0.28.1
-  js-yaml: 4.2.0
-  picomatch@^2.3.1: 2.3.2
-  picomatch@^4.0.3: 4.0.4
-  postcss: 8.5.15
-  ws: 8.21.0
+  "postcss@<8.5.23": ">=8.5.23"
