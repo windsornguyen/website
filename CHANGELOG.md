@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.1](https://github.com/windsornguyen/website/compare/website-v0.2.0...website-v0.2.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **deps:** patch react-router and transitive security advisories ([#12](https://github.com/windsornguyen/website/issues/12)) ([42ea53c](https://github.com/windsornguyen/website/commit/42ea53ce6bd3dc10742edb9765dc96c43cf89c73))
+
+
+### Chores
+
+* **lint:** enforce cyclomatic complexity ceiling ([#13](https://github.com/windsornguyen/website/issues/13)) ([2ae4c2e](https://github.com/windsornguyen/website/commit/2ae4c2e4553df614db665e8c2a58015ddc1e4728))
+
 ## [0.2.0](https://github.com/windsornguyen/website/compare/website-v0.1.0...website-v0.2.0) (2026-09-02)
 
 
