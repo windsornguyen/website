@@ -5,6 +5,11 @@ resource "cloudflare_worker" "website" {
   observability = {
     enabled = true
   }
+
+  subdomain = {
+    enabled          = true
+    previews_enabled = true
+  }
 }
 
 resource "cloudflare_workers_custom_domain" "website" {

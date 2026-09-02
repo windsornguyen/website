@@ -8,7 +8,7 @@ Wrangler still owns bundling and deploying the React Router Worker.
 Create the R2 state bucket once before first init:
 
 ```sh
-cf r2 buckets create windsornguyen-com-terraform-state
+pnpm exec wrangler r2 bucket create windsornguyen-com-bucket
 ```
 
 Then initialize Terraform with scoped R2 credentials in the environment:
@@ -24,9 +24,7 @@ Do not commit state files, local backend files, API tokens, or R2 secrets.
 ## Local checks
 
 ```sh
-terraform -chdir=infra/cloudflare fmt -recursive
-terraform -chdir=infra/cloudflare init -backend=false
-terraform -chdir=infra/cloudflare validate
+pnpm infra:check
 ```
 
 Plan production changes with the checked-in, non-secret IDs:

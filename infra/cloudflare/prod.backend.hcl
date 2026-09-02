@@ -1,4 +1,4 @@
-bucket                      = "windsornguyen-com-terraform-state"
+bucket                      = "windsornguyen-com-bucket"
 key                         = "cloudflare/prod/terraform.tfstate"
 region                      = "auto"
 skip_credentials_validation = true
