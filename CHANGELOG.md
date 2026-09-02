@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.2.0](https://github.com/windsornguyen/website/compare/website-v0.1.0...website-v0.2.0) (2026-09-02)
+
+
+### Features
+
+* **ci:** deploy website to cloudflare ([#10](https://github.com/windsornguyen/website/issues/10)) ([8d47f66](https://github.com/windsornguyen/website/commit/8d47f668c9451343d39a5242f7dd6d6b1e479a32))
+* **cloudflare:** serve prerendered site with workers ([dff28a0](https://github.com/windsornguyen/website/commit/dff28a09e4bf0a07b53b6356c7c7aa60a6813be0))
+* **cloudflare:** serve prerendered site with workers ([#6](https://github.com/windsornguyen/website/issues/6)) ([109c31f](https://github.com/windsornguyen/website/commit/109c31fa96a525055098f4f594f401aa641fcb7e))
+
+
+### Bug Fixes
+
+* **dev:** remove duplicate react refresh plugin ([64f4fb6](https://github.com/windsornguyen/website/commit/64f4fb60070b4839c41b7e9e55d40eccc2f38b29))
+* **router:** preserve static client navigation ([#9](https://github.com/windsornguyen/website/issues/9)) ([2a684b1](https://github.com/windsornguyen/website/commit/2a684b16ce91356abe31c0d87bd925288baa085b))
+* **vercel:** configure react router deployment ([a02ca6a](https://github.com/windsornguyen/website/commit/a02ca6ad20725653803376d00451f6bc8531ce2b))
+
+
+### Refactors
+
+* **router:** migrate website to react router ([770d443](https://github.com/windsornguyen/website/commit/770d4434e1b916ba789b4c18d31ae2c6e5159ccc))
+* **router:** migrate website to react router ([#3](https://github.com/windsornguyen/website/issues/3)) ([16b86dc](https://github.com/windsornguyen/website/commit/16b86dc8c67b39bebca4b4de80a639ab634d41f2))
+
+
+### Chores
+
+* **ci:** generate workflows with hollywood ([7ad1de6](https://github.com/windsornguyen/website/commit/7ad1de61338ef97cd04e870b0184b30924f72763))
+* **ci:** generate workflows with hollywood ([#7](https://github.com/windsornguyen/website/issues/7)) ([c341168](https://github.com/windsornguyen/website/commit/c341168d8d6aa2bf2e373771d91622f543b587b5))
+* **deps:** harden website toolchain ([937ac77](https://github.com/windsornguyen/website/commit/937ac77d9a1da1ba9b2e0cdbc2dc9d073ea93790))
+* **infra:** initialize cloudflare terraform ([#8](https://github.com/windsornguyen/website/issues/8)) ([a2bd9e1](https://github.com/windsornguyen/website/commit/a2bd9e1e4de7d922488081fcddaabe9efdb77fa8))
+
 ## [0.1.0](https://github.com/windsornguyen/website/compare/website-v0.0.1...website-v0.1.0) (2026-05-06)
 
 
