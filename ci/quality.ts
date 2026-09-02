@@ -1,4 +1,5 @@
 import {
+  command,
   eq,
   format,
   github,
@@ -6,6 +7,7 @@ import {
   workflow,
   type GitHubRunStep,
   type GitHubWorkflowStep,
+  type WorkflowCommand,
 } from "@dedalus-labs/hollywood";
 
 const ubuntu = "ubuntu-24.04";
@@ -40,7 +42,9 @@ const setupNode = (): GitHubWorkflowStep => ({
   },
 });
 
-const install = (): GitHubRunStep => ({ run: "pnpm install --frozen-lockfile" });
+const pnpm = (...args: readonly string[]): WorkflowCommand => command({ file: "pnpm", args });
+
+const install = (): GitHubRunStep => ({ run: pnpm("install", "--frozen-lockfile") });
 
 const setupSupabase = (): GitHubWorkflowStep => ({
   uses: supabaseSetupV3,
@@ -85,19 +89,27 @@ export const quality = workflow({
         ...setup(),
         {
           name: "Hollywood workflow drift",
-          run: "pnpm check:workflows",
+          run: pnpm("check:workflows"),
         },
         {
           name: "oxlint",
-          run: "pnpm exec oxlint --deny-warnings",
+          run: pnpm("exec", "oxlint", "--deny-warnings"),
         },
         {
           name: "markdownlint",
-          run: "pnpm exec markdownlint-cli2 '**/*.{md,mdx}' '#node_modules' '#build' '#dist' '#CHANGELOG.md'",
+          run: pnpm(
+            "exec",
+            "markdownlint-cli2",
+            "**/*.{md,mdx}",
+            "#node_modules",
+            "#build",
+            "#dist",
+            "#CHANGELOG.md",
+          ),
         },
         {
           name: "Format check (oxfmt)",
-          run: "pnpm check-format",
+          run: pnpm("check-format"),
         },
       ],
     }),
@@ -108,7 +120,7 @@ export const quality = workflow({
         ...setup(),
         {
           name: "TypeScript",
-          run: "pnpm typecheck",
+          run: pnpm("typecheck"),
         },
       ],
     }),
@@ -120,15 +132,21 @@ export const quality = workflow({
         setupTerraform(),
         {
           name: "Terraform fmt",
-          run: "terraform -chdir=infra/cloudflare fmt -check -recursive",
+          run: command({
+            file: "terraform",
+            args: ["-chdir=infra/cloudflare", "fmt", "-check", "-recursive"],
+          }),
         },
         {
           name: "Terraform init",
-          run: "terraform -chdir=infra/cloudflare init -backend=false",
+          run: command({
+            file: "terraform",
+            args: ["-chdir=infra/cloudflare", "init", "-backend=false"],
+          }),
         },
         {
           name: "Terraform validate",
-          run: "terraform -chdir=infra/cloudflare validate",
+          run: command({ file: "terraform", args: ["-chdir=infra/cloudflare", "validate"] }),
         },
       ],
     }),
@@ -139,7 +157,7 @@ export const quality = workflow({
         ...setup(),
         {
           name: "Vitest",
-          run: "pnpm test",
+          run: pnpm("test"),
         },
       ],
     }),
@@ -152,11 +170,11 @@ export const quality = workflow({
         ...setup(),
         {
           name: "Smoke built site",
-          run: "pnpm test:smoke",
+          run: pnpm("test:smoke"),
         },
         {
           name: "Cloudflare bundle dry run",
-          run: "pnpm check:cloudflare",
+          run: pnpm("check:cloudflare"),
         },
       ],
     }),
@@ -169,7 +187,7 @@ export const quality = workflow({
         setupSupabase(),
         {
           name: "pg-delta drift gate",
-          run: "pnpm db verify",
+          run: pnpm("db", "verify"),
         },
       ],
     }),

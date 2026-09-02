@@ -9,9 +9,7 @@ import { error, info, pc, success } from "./lib/fmt";
 
 const cli = cac("db");
 
-// Migration codegen engine. pg-delta is Supabase's own diff engine; the CLI
-// still defaults to legacy migra, so pin it rather than inherit whichever
-// engine a given CLI release selects.
+// The CLI still defaults to migra.
 const diffEngine = "--use-pg-delta";
 
 function formatCommand(program: string, args: string[]): string {

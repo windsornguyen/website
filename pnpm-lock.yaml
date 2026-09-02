@@ -52,8 +52,8 @@ importers:
         specifier: ^4.20260702.1
         version: 4.20260702.1
       '@dedalus-labs/hollywood':
-        specifier: 0.0.1
-        version: 0.0.1
+        specifier: 0.0.5
+        version: 0.0.5
       '@mdx-js/rollup':
         specifier: ^3.1.1
         version: 3.1.1(rollup@4.63.1)
@@ -126,8 +126,8 @@ packages:
   '@actions/exec@3.0.0':
     resolution: {integrity: sha512-6xH/puSoNBXb72VPlZVm7vQ+svQpFyA96qdDBvhB8eNZOE8LtPf9L4oAsfzK/crCL8YZ+19fKYVnM63Sl+Xzlw==}
 
-  '@actions/expressions@0.3.57':
-    resolution: {integrity: sha512-9i38lcz1wsjLYagAMg0wFRf9859oBB2sLjmVjxXHNMzHoovDdxI4xeoWCRrsaUKgKFkffbdA3MiMAfvlXjX1ig==}
+  '@actions/expressions@0.3.61':
+    resolution: {integrity: sha512-Ig+tXELvTjlqxQAWBQnLNn2dPpNraLMdSnT+vDzDPmJtbNUhIAH/Z9kVT8pZ8UtJi9vUGs8hwHE8JFJmbOnLEA==}
     engines: {node: '>= 20'}
 
   '@actions/http-client@4.0.1':
@@ -136,8 +136,8 @@ packages:
   '@actions/io@3.0.2':
     resolution: {integrity: sha512-nRBchcMM+QK1pdjO7/idu86rbJI5YHUKCvKs0KxnSYbVe3F51UfGxuZX4Qy/fWlp6l7gWFwIkrOzN+oUK03kfw==}
 
-  '@actions/workflow-parser@0.3.55':
-    resolution: {integrity: sha512-2TH6h9XBJ30YXJNt4sc/kpvl1JgG3mvrYGj6ZTy1l8whBN8LPCKg9BRZNQREmRUfHimfwdeCg/W8DRmB7kunVg==}
+  '@actions/workflow-parser@0.3.61':
+    resolution: {integrity: sha512-NBjJrbwwrEN3LSN0NAISLpCWQLcPSBjmAIkLXHgjGX8Yql4PiD33ifSAvr9sIMU9uIs8wZiGUnvo9yPIMIfKdg==}
     engines: {node: '>= 20'}
 
   '@babel/code-frame@7.29.7':
@@ -322,8 +322,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@dedalus-labs/hollywood@0.0.1':
-    resolution: {integrity: sha512-J64EBEuk7eGcl62BpeN86HYbNassxnR8/NjUN8CjWpqI7BlMqzKhGAgY016/TzqBzXnw1drIuSHJAUZ7Zy3JWg==}
+  '@dedalus-labs/hollywood@0.0.5':
+    resolution: {integrity: sha512-9UlnGlYuyTCDE8PJzIc6HOo6VFjDxrYnh68VsFGjbDYOye1hXcpjPSESdg2vnmgSZHuWx9lbr5eKtQP3LdsU1Q==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -699,6 +699,9 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@octokit/openapi-types@28.0.0':
+    resolution: {integrity: sha512-0rFyLuyHvIj6uuZWuDslxkowFYdPXoNIkeAv4b27dzm2Tf4vGWXnPsMcxs7d65kLdMERgP3wc1AEPlqMz8e1cQ==}
 
   '@oxc-project/runtime@0.133.0':
     resolution: {integrity: sha512-PkvjA1Lq5++V5S1E6Patr92ZVcieE6EalDr1VJTqv4BnjZdOUC4W3p8k1wMXSd5/2aFP4b/A6N5sg2Bkzcr9vQ==}
@@ -3465,6 +3468,9 @@ packages:
   youch@4.1.0-beta.10:
     resolution: {integrity: sha512-rLfVLB4FgQneDr0dv1oddCVZmKjcJ6yX6mS4pU82Mq/Dt9a3cLZQ62pDBL4AUO+uVrCvtWz3ZFUL2HFAFJ/BXQ==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -3479,7 +3485,7 @@ snapshots:
     dependencies:
       '@actions/io': 3.0.2
 
-  '@actions/expressions@0.3.57': {}
+  '@actions/expressions@0.3.61': {}
 
   '@actions/http-client@4.0.1':
     dependencies:
@@ -3488,9 +3494,9 @@ snapshots:
 
   '@actions/io@3.0.2': {}
 
-  '@actions/workflow-parser@0.3.55':
+  '@actions/workflow-parser@0.3.61':
     dependencies:
-      '@actions/expressions': 0.3.57
+      '@actions/expressions': 0.3.61
       cronstrue: 2.59.0
       yaml: 2.8.4
 
@@ -3713,14 +3719,16 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@dedalus-labs/hollywood@0.0.1':
+  '@dedalus-labs/hollywood@0.0.5':
     dependencies:
       '@actions/core': 3.0.1
       '@actions/exec': 3.0.0
-      '@actions/expressions': 0.3.57
-      '@actions/workflow-parser': 0.3.55
+      '@actions/expressions': 0.3.61
+      '@actions/workflow-parser': 0.3.61
+      '@octokit/openapi-types': 28.0.0
       esbuild: 0.28.1
       yaml: 2.8.4
+      zod: 4.4.3
 
   '@emnapi/runtime@1.11.3':
     dependencies:
@@ -3993,6 +4001,8 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.3
+
+  '@octokit/openapi-types@28.0.0': {}
 
   '@oxc-project/runtime@0.133.0': {}
 
@@ -6546,5 +6556,7 @@ snapshots:
       '@speed-highlight/core': 1.2.24
       cookie: 1.1.1
       youch-core: 0.3.3
+
+  zod@4.4.3: {}
 
   zwitch@2.0.4: {}
