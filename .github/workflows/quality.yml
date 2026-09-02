@@ -104,6 +104,25 @@ jobs:
         run: pnpm test:smoke
       - name: Cloudflare bundle dry run
         run: pnpm check:cloudflare
+  database:
+    name: Database / Schema drift
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520
+        with:
+          version: 2.108.0
+      - name: pg-delta drift gate
+        run: pnpm db verify
   links:
     name: Quality / Links
     runs-on: ubuntu-24.04
