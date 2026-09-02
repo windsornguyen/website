@@ -88,7 +88,6 @@ cli
     }
 
     if (options.execute) {
-      // --no-apply writes the file only; `pnpm db migrate` applies it.
       run("supabase", [
         "db",
         "schema",

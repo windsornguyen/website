@@ -381,8 +381,4 @@ s3_access_key = "env(S3_ACCESS_KEY)"
 s3_secret_key = "env(S3_SECRET_KEY)"
 
 [experimental.pgdelta]
-# Declarative schema workflow backed by pg-delta. Alpha, but Supabase's stated
-# end state: pg-delta becomes the default engine and these commands graduate.
-# Schema lives under ./database (the default); pg-delta orders statements by
-# dependency, so no schema_paths list is needed.
 enabled = true
