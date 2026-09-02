@@ -24,19 +24,25 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+        shell: bash
       - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
         with:
           terraform_wrapper: false
       - name: Repository checks
         run: pnpm check
+        shell: bash
       - name: Unit tests
         run: pnpm test
+        shell: bash
       - name: Infrastructure checks
         run: pnpm infra:check
+        shell: bash
       - name: Smoke built site
         run: pnpm test:smoke
+        shell: bash
       - name: Cloudflare bundle dry run
         run: pnpm check:cloudflare
+        shell: bash
   release:
     name: Release / Reconcile
     runs-on: ubuntu-24.04
@@ -83,6 +89,7 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+        shell: bash
       - name: Require tagged release checkout
         env:
           RELEASE_SHA: ${{ needs.release.outputs.release_sha }}
@@ -90,12 +97,17 @@ jobs:
         run: test -n "$RELEASE_TAG" && test "$(git rev-parse HEAD)" = "$RELEASE_SHA"
       - name: Smoke built site
         run: pnpm test:smoke
+        shell: bash
       - name: Cloudflare bundle dry run
         run: pnpm check:cloudflare
+        shell: bash
       - name: Deploy Worker
         env:
           RELEASE_SHA: ${{ needs.release.outputs.release_sha }}
           RELEASE_TAG: ${{ needs.release.outputs.tag_name }}
         run: pnpm exec wrangler deploy --strict --tag "$RELEASE_TAG" --message "$RELEASE_TAG ($RELEASE_SHA)"
       - name: Smoke live deployment
-        run: SITE_URL=https://windsornguyen.com node --test tests/site-live.smoke.mjs
+        env:
+          SITE_URL: https://windsornguyen.com
+        run: node --test tests/site-live.smoke.mjs
+        shell: bash
