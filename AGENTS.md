@@ -62,6 +62,13 @@ Never use `!important`. If you need it, the architecture is wrong. Theme modes
 (dark, machine) work by overriding CSS custom properties, not by brute-forcing
 specificity. Scope style changes to targeted selectors, not `*` wildcards.
 
+## Complexity
+
+oxlint's `complexity` rule is an error at 10 decision paths per function (`modified`
+variant: a whole `switch` counts as one decision). When a function trips it, split
+distinct decisions into named helpers or a dispatch table. Never suppress the rule.
+See the [Oxc rule reference](https://oxc.rs/docs/guide/usage/linter/rules/eslint/complexity).
+
 ## Consistency
 
 When renaming a value that serves as both a display label and a runtime discriminant,

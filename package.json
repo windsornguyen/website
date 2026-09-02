@@ -15,7 +15,7 @@
     "db": "tsx scripts/db.ts",
     "test": "pnpm llms && vp test --run",
     "test:smoke": "node --test tests/site-smoke.smoke.mjs",
-    "lint": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\"",
+    "lint": "oxlint --deny-warnings && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\"",
     "format": "vp fmt --write .",
     "check-format": "vp fmt --check .",
     "typecheck": "react-router typegen && tsgo --noEmit",
@@ -24,7 +24,7 @@
     "workflows": "hollywood generate --source-root ci --workflows-dir .github/workflows \"ci/*.ts\"",
     "check:workflows": "hollywood check --generated --workflow-security --source-root ci --workflows-dir .github/workflows",
     "check:cloudflare": "wrangler deploy --dry-run --strict --outdir .wrangler/tmp",
-    "check": "vp lint . && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\" && pnpm check-format && pnpm typecheck && pnpm check:workflows",
+    "check": "oxlint --deny-warnings && markdownlint-cli2 \"**/*.{md,mdx}\" \"#node_modules\" \"#build\" \"#dist\" \"#.wrangler\" \"#CHANGELOG.md\" && pnpm check-format && pnpm typecheck && pnpm check:workflows",
     "check:vp": "vp check ."
   },
   "dependencies": {

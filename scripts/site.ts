@@ -13,6 +13,93 @@ import {
   writePostFile,
 } from "./lib/posts";
 
+type PostOptions = {
+  description: string;
+  force?: boolean;
+  json?: boolean;
+  publishedAt: string;
+  slug?: string;
+  title?: string;
+};
+
+async function listPosts(options: PostOptions) {
+  const posts = await readPostEntries();
+
+  if (options.json) {
+    console.log(JSON.stringify(posts, null, 2));
+    return;
+  }
+
+  heading(`Posts (${posts.length})`);
+  table(
+    posts.map((post) => [
+      pc.bold(post.title),
+      pc.dim(post.slug),
+      pc.yellow(renderTimestampLabel(post.publishedAt)),
+      pc.dim(post.status),
+    ]),
+    ["Title", "Slug", "Published", "Status"],
+  );
+  console.log();
+}
+
+async function verifyPosts(options: PostOptions) {
+  const posts = await readPostEntries();
+  const errors = validatePostEntries(posts);
+
+  if (options.json) {
+    console.log(
+      JSON.stringify({ ok: errors.length === 0, postCount: posts.length, errors }, null, 2),
+    );
+    return;
+  }
+
+  if (errors.length === 0) {
+    success(`Verified ${posts.length} post(s). No issues found.`);
+    return;
+  }
+
+  heading("Verification Errors");
+  for (const err of errors) {
+    error(err);
+  }
+  console.log();
+
+  process.exitCode = 1;
+}
+
+async function createPost(options: PostOptions) {
+  if (!options.title) {
+    throw new Error("--title is required");
+  }
+
+  const slugCandidate = options.slug ?? slugifyTitle(options.title);
+  const slug = parseBlogSlug(slugCandidate);
+
+  if (!slug) {
+    throw new Error("Could not derive a lowercase kebab-case slug from the provided title.");
+  }
+
+  const postPath = await writePostFile(
+    {
+      slug,
+      title: options.title,
+      description: options.description,
+      publishedAt: options.publishedAt,
+      status: "draft",
+    },
+    options.force,
+  );
+
+  success(`Created ${pc.underline(postPath)}`);
+}
+
+const postCommands: Record<string, (options: PostOptions) => Promise<void>> = {
+  list: listPosts,
+  verify: verifyPosts,
+  create: createPost,
+};
+
 const cli = cac("site");
 
 cli
@@ -27,95 +114,12 @@ cli
     default: new Date().toISOString(),
   })
   .option("--force", "Overwrite an existing file if it already exists.")
-  .action(
-    async (
-      subcommand: string,
-      options: {
-        description: string;
-        force?: boolean;
-        json?: boolean;
-        publishedAt: string;
-        slug?: string;
-        title?: string;
-      },
-    ) => {
-      if (subcommand === "list") {
-        const posts = await readPostEntries();
-
-        if (options.json) {
-          console.log(JSON.stringify(posts, null, 2));
-          return;
-        }
-
-        heading(`Posts (${posts.length})`);
-        table(
-          posts.map((post) => [
-            pc.bold(post.title),
-            pc.dim(post.slug),
-            pc.yellow(renderTimestampLabel(post.publishedAt)),
-            pc.dim(post.status),
-          ]),
-          ["Title", "Slug", "Published", "Status"],
-        );
-        console.log();
-        return;
-      }
-
-      if (subcommand === "verify") {
-        const posts = await readPostEntries();
-        const errors = validatePostEntries(posts);
-
-        if (options.json) {
-          console.log(
-            JSON.stringify({ ok: errors.length === 0, postCount: posts.length, errors }, null, 2),
-          );
-          return;
-        }
-
-        if (errors.length === 0) {
-          success(`Verified ${posts.length} post(s). No issues found.`);
-          return;
-        }
-
-        heading("Verification Errors");
-        for (const err of errors) {
-          error(err);
-        }
-        console.log();
-
-        process.exitCode = 1;
-        return;
-      }
-
-      if (subcommand !== "create") {
-        throw new Error(`Unknown post subcommand: ${subcommand}`);
-      }
-
-      if (!options.title) {
-        throw new Error("--title is required");
-      }
-
-      const slugCandidate = options.slug ?? slugifyTitle(options.title);
-      const slug = parseBlogSlug(slugCandidate);
-
-      if (!slug) {
-        throw new Error("Could not derive a lowercase kebab-case slug from the provided title.");
-      }
-
-      const postPath = await writePostFile(
-        {
-          slug,
-          title: options.title,
-          description: options.description,
-          publishedAt: options.publishedAt,
-          status: "draft",
-        },
-        options.force,
-      );
-
-      success(`Created ${pc.underline(postPath)}`);
-    },
-  );
+  .action(async (subcommand: string, options: PostOptions) => {
+    const run = postCommands[subcommand];
+    if (!run) {
+      throw new Error(`Unknown post subcommand: ${subcommand}`);
+    }
+    await run(options);
+  });
 
 cli.help();
-cli.parse();
