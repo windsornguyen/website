@@ -2,3 +2,5 @@
 # Remove once @react-router/dev's nested vite ships postcss >= 8.5.23.
 overrides:
   "postcss@<8.5.23": ">=8.5.23"
+onlyBuiltDependencies:
+  - supabase

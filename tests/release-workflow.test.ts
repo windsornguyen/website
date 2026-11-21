@@ -70,11 +70,19 @@ describe("website release workflow", () => {
 
     expect(verifyJob.steps).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ run: "pnpm check" }),
-        expect.objectContaining({ run: "pnpm test" }),
-        expect.objectContaining({ run: "pnpm infra:check" }),
-        expect.objectContaining({ run: "pnpm test:smoke" }),
-        expect.objectContaining({ run: "pnpm check:cloudflare" }),
+        expect.objectContaining({
+          run: expect.objectContaining({ file: "pnpm", args: ["check"] }),
+        }),
+        expect.objectContaining({ run: expect.objectContaining({ file: "pnpm", args: ["test"] }) }),
+        expect.objectContaining({
+          run: expect.objectContaining({ file: "pnpm", args: ["infra:check"] }),
+        }),
+        expect.objectContaining({
+          run: expect.objectContaining({ file: "pnpm", args: ["test:smoke"] }),
+        }),
+        expect.objectContaining({
+          run: expect.objectContaining({ file: "pnpm", args: ["check:cloudflare"] }),
+        }),
       ]),
     );
     expect(releaseJob.steps).toEqual(
@@ -94,17 +102,28 @@ describe("website release workflow", () => {
             ref: needsOutput("release", "release_sha"),
           },
         }),
-        expect.objectContaining({ run: "pnpm test:smoke" }),
-        expect.objectContaining({ run: "pnpm check:cloudflare" }),
+        expect.objectContaining({
+          run: expect.objectContaining({ file: "pnpm", args: ["test:smoke"] }),
+        }),
+        expect.objectContaining({
+          run: expect.objectContaining({ file: "pnpm", args: ["check:cloudflare"] }),
+        }),
         expect.objectContaining({
           env: {
             RELEASE_SHA: needsOutput("release", "release_sha"),
             RELEASE_TAG: needsOutput("release", "tag_name"),
           },
-          run: 'pnpm exec wrangler deploy --strict --tag "$RELEASE_TAG" --message "$RELEASE_TAG ($RELEASE_SHA)"',
+          run: expect.objectContaining({
+            script:
+              'pnpm exec wrangler deploy --strict --tag "$RELEASE_TAG" --message "$RELEASE_TAG ($RELEASE_SHA)"',
+          }),
         }),
         expect.objectContaining({
-          run: "SITE_URL=https://windsornguyen.com node --test tests/site-live.smoke.mjs",
+          env: { SITE_URL: "https://windsornguyen.com" },
+          run: expect.objectContaining({
+            file: "node",
+            args: ["--test", "tests/site-live.smoke.mjs"],
+          }),
         }),
       ]),
     );

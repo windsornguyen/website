@@ -1,4 +1,6 @@
 import {
+  command,
+  unsafeShell,
   eq,
   format,
   github,
@@ -9,6 +11,7 @@ import {
   workflow,
   type GitHubRunStep,
   type GitHubWorkflowStep,
+  type WorkflowCommand,
 } from "@dedalus-labs/hollywood";
 
 const checkoutV4 = "actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5";
@@ -41,7 +44,9 @@ const setupNode = (): GitHubWorkflowStep => ({
   },
 });
 
-const install = (): GitHubRunStep => ({ run: "pnpm install --frozen-lockfile" });
+const pnpm = (...args: readonly string[]): WorkflowCommand => command({ file: "pnpm", args });
+
+const install = (): GitHubRunStep => ({ run: pnpm("install", "--frozen-lockfile") });
 
 const setup = (): readonly GitHubWorkflowStep[] => [
   checkout(),
@@ -69,11 +74,11 @@ export const release = workflow({
       steps: [
         ...setup(),
         setupTerraform(),
-        { name: "Repository checks", run: "pnpm check" },
-        { name: "Unit tests", run: "pnpm test" },
-        { name: "Infrastructure checks", run: "pnpm infra:check" },
-        { name: "Smoke built site", run: "pnpm test:smoke" },
-        { name: "Cloudflare bundle dry run", run: "pnpm check:cloudflare" },
+        { name: "Repository checks", run: pnpm("check") },
+        { name: "Unit tests", run: pnpm("test") },
+        { name: "Infrastructure checks", run: pnpm("infra:check") },
+        { name: "Smoke built site", run: pnpm("test:smoke") },
+        { name: "Cloudflare bundle dry run", run: pnpm("check:cloudflare") },
       ],
     }),
     release: job({
@@ -133,15 +138,17 @@ export const release = workflow({
             RELEASE_SHA: needsOutput("release", "release_sha"),
             RELEASE_TAG: needsOutput("release", "tag_name"),
           },
-          run: 'test -n "$RELEASE_TAG" && test "$(git rev-parse HEAD)" = "$RELEASE_SHA"',
+          run: unsafeShell(
+            'test -n "$RELEASE_TAG" && test "$(git rev-parse HEAD)" = "$RELEASE_SHA"',
+          ),
         },
         {
           name: "Smoke built site",
-          run: "pnpm test:smoke",
+          run: pnpm("test:smoke"),
         },
         {
           name: "Cloudflare bundle dry run",
-          run: "pnpm check:cloudflare",
+          run: pnpm("check:cloudflare"),
         },
         {
           name: "Deploy Worker",
@@ -149,11 +156,14 @@ export const release = workflow({
             RELEASE_SHA: needsOutput("release", "release_sha"),
             RELEASE_TAG: needsOutput("release", "tag_name"),
           },
-          run: 'pnpm exec wrangler deploy --strict --tag "$RELEASE_TAG" --message "$RELEASE_TAG ($RELEASE_SHA)"',
+          run: unsafeShell(
+            'pnpm exec wrangler deploy --strict --tag "$RELEASE_TAG" --message "$RELEASE_TAG ($RELEASE_SHA)"',
+          ),
         },
         {
           name: "Smoke live deployment",
-          run: "SITE_URL=https://windsornguyen.com node --test tests/site-live.smoke.mjs",
+          env: { SITE_URL: "https://windsornguyen.com" },
+          run: command({ file: "node", args: ["--test", "tests/site-live.smoke.mjs"] }),
         },
       ],
     }),
