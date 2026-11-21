@@ -1,4 +1,5 @@
 import { execFileSync, spawn } from "node:child_process";
+import { readFile } from "node:fs/promises";
 import { setTimeout as delay } from "node:timers/promises";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -62,6 +63,22 @@ test("homepage renders the personal site content", async () => {
   assert.match(html, /One year at Dedalus/);
   assert.match(html, /\/blog\/first-post/);
   assert.match(html, /\/blog\/reflecting-on-2024/);
+});
+
+test("static build embeds routes needed for client navigation", async () => {
+  const html = await readFile("build/client/index.html", "utf8");
+  const manifestHref = html.match(/href="(\/assets\/manifest-[^"]+\.js)"/)?.[1];
+  assert.ok(manifestHref, "missing initial React Router manifest asset");
+
+  const manifestSource = (await readFile(`build/client${manifestHref}`, "utf8")).trim();
+  const manifestPrefix = "window.__reactRouterManifest=";
+  assert.ok(manifestSource.startsWith(manifestPrefix), "invalid React Router manifest prefix");
+  assert.ok(manifestSource.endsWith(";"), "invalid React Router manifest suffix");
+
+  const manifest = JSON.parse(manifestSource.slice(manifestPrefix.length, -1));
+
+  assert.ok(manifest.routes["routes/blog"], "blog route requires runtime manifest discovery");
+  assert.match(html, /"routeDiscovery":\{"mode":"initial"\}/);
 });
 
 test("blog posts render through the dynamic blog route", async () => {

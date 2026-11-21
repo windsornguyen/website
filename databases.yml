@@ -8,10 +8,10 @@ environments:
     db_port: 54322
 
   preview:
-    # Wired via SUPABASE_DB_URL in Vercel preview environment.
-    # Set SUPABASE_DB_URL in .env.preview or Vercel dashboard.
+    # Wired via SUPABASE_DB_URL in preview environments.
+    # Set SUPABASE_DB_URL in the deployment provider or local env.
 
   production:
     project_ref: eqxmqnhoupocncjcbwme
-    # Wired via SUPABASE_DB_URL in Vercel production environment.
-    # Set SUPABASE_DB_URL in .env.production or Vercel dashboard.
+    # Wired via SUPABASE_DB_URL in production environments.
+    # Set SUPABASE_DB_URL in the deployment provider or local env.

@@ -16,15 +16,13 @@ const codeHikeConfig = {
 };
 
 export default defineConfig({
-  define: {
-    __VERCEL_BUILD__: JSON.stringify(process.env.VERCEL === "1"),
-  },
   resolve: {
     tsconfigPaths: true,
   },
   test: {
     environment: "node",
     include: ["tests/**/*.test.ts"],
+    exclude: ["tests/**/*.integration.test.ts"],
   },
   fmt: {
     printWidth: 100,

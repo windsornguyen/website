@@ -9,6 +9,9 @@ import { error, info, pc, success } from "./lib/fmt";
 
 const cli = cac("db");
 
+// The CLI still defaults to migra.
+const diffEngine = "--use-pg-delta";
+
 function formatCommand(program: string, args: string[]): string {
   const parts = [program, ...args];
   return parts.join(" ");
@@ -76,7 +79,7 @@ cli
   });
 
 cli
-  .command("diff", "Generate a migration from declarative schema diff")
+  .command("diff", "Generate a migration from the declarative schema")
   .option("--name <name>", "Migration name (required)")
   .option("--execute", "Write the migration file (dry-run by default)")
   .action((options: { name?: string; execute?: boolean }) => {
@@ -85,13 +88,41 @@ cli
     }
 
     if (options.execute) {
-      run("supabase", ["db", "diff", "-f", options.name]);
+      run("supabase", [
+        "db",
+        "schema",
+        "declarative",
+        "sync",
+        "--no-apply",
+        "--name",
+        options.name,
+      ]);
       success(`Created migration: ${options.name}`);
     } else {
       info("Schema diff (dry run):");
-      run("supabase", ["db", "diff"]);
+      run("supabase", ["db", "diff", diffEngine]);
       info(`Pass ${pc.bold("--execute")} to write migration file.`);
     }
+  });
+
+cli
+  .command("verify", "Fail if migrations do not fully capture the declarative schema")
+  .action(() => {
+    const output = readCommandOutput("supabase", [
+      "db",
+      "diff",
+      diffEngine,
+      "--output-format",
+      "json",
+    ]);
+    const { diff } = JSON.parse(output) as { diff: string };
+    if (diff === "") {
+      success("Migrations match declarative schema.");
+      return;
+    }
+    error("Schema drift: run `pnpm db diff --name <name> --execute` to capture it.");
+    process.stdout.write(diff);
+    process.exitCode = 1;
   });
 
 cli

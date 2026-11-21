@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { useLocation } from "react-router";
+import { href, useLocation } from "react-router";
 
 import { useCommandMenu } from "@/components/command-menu";
 import ViewTransitionLink from "@/components/view-transition-link";
@@ -78,10 +78,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <p
-        className="text-body text-fg-secondary mt-0.5 leading-relaxed"
-        style={{ letterSpacing: "-0.011em" }}
-      >
+      <p className="text-body text-fg mt-0.5 leading-[normal]">
         Co-Founder and CTO of{" "}
         <a
           href="https://dedaluslabs.ai"
@@ -131,7 +128,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
             {posts.map((post) => (
               <li key={post.slug}>
                 <ViewTransitionLink
-                  to={`/blog/${post.slug}`}
+                  to={href("/blog/:slug", { slug: post.slug })}
                   className="hover:bg-surface-active flex items-start justify-between gap-4 rounded-sm px-2 py-2 transition-colors"
                 >
                   <div className="min-w-0">

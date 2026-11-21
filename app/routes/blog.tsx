@@ -33,15 +33,15 @@ export function loader({ params }: Route.LoaderArgs) {
   };
 }
 
-export function meta({ data }: Route.MetaArgs) {
-  if (!data) {
+export function meta({ loaderData }: Route.MetaArgs) {
+  if (!loaderData) {
     return [];
   }
 
   return buildPageMeta({
-    canonicalPath: data.canonical,
-    description: data.description,
-    title: siteMetadata.titleTemplate.replace("%s", data.title),
+    canonicalPath: loaderData.canonical,
+    description: loaderData.description,
+    title: siteMetadata.titleTemplate.replace("%s", loaderData.title),
   });
 }
 
