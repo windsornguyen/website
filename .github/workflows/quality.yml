@@ -120,7 +120,7 @@ jobs:
         run: pnpm check:cloudflare
         shell: bash
   database:
-    name: Database / Schema drift
+    name: Database / Schema & integration
     runs-on: ubuntu-24.04
     if: ${{ github.event_name == 'pull_request' }}
     steps:
@@ -134,9 +134,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
         shell: bash
-      - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520
-        with:
-          version: 2.108.0
+      - name: Integration tests
+        run: pnpm test:integration
+        shell: bash
       - name: pg-delta drift gate
         run: pnpm db verify
         shell: bash

@@ -16,7 +16,6 @@ const setupTerraformV4 = "hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908c
 const pnpmSetupV4 = "pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1";
 const setupNodeV4 = "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020";
 const lycheeV2 = "lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411";
-const supabaseSetupV3 = "supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520";
 
 const checkout = (): GitHubWorkflowStep => ({
   uses: checkoutV4,
@@ -45,13 +44,6 @@ const setupNode = (): GitHubWorkflowStep => ({
 const pnpm = (...args: readonly string[]): WorkflowCommand => command({ file: "pnpm", args });
 
 const install = (): GitHubRunStep => ({ run: pnpm("install", "--frozen-lockfile") });
-
-const setupSupabase = (): GitHubWorkflowStep => ({
-  uses: supabaseSetupV3,
-  with: {
-    version: "2.108.0",
-  },
-});
 
 const setup = (): readonly GitHubWorkflowStep[] => [
   checkout(),
@@ -179,12 +171,15 @@ export const quality = workflow({
       ],
     }),
     database: job({
-      name: "Database / Schema drift",
+      name: "Database / Schema & integration",
       "runs-on": ubuntu,
       if: isPullRequest,
       steps: [
         ...setup(),
-        setupSupabase(),
+        {
+          name: "Integration tests",
+          run: pnpm("test:integration"),
+        },
         {
           name: "pg-delta drift gate",
           run: pnpm("db", "verify"),
