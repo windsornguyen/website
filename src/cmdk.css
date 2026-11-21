@@ -41,7 +41,7 @@
     0 16px 70px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(0, 0, 0, 0.04);
   overflow: hidden;
-  font-family: var(--font-family-sans);
+  font-family: var(--font-sans);
   animation: cmdk-enter 0.15s ease;
 }
 
@@ -68,7 +68,7 @@
   color: var(--fg);
   border-bottom: 1px solid var(--edge);
   border-radius: 0;
-  font-family: var(--font-family-sans);
+  font-family: var(--font-sans);
   letter-spacing: -0.011em;
 }
 
