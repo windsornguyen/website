@@ -28,14 +28,19 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+        shell: bash
       - name: Hollywood workflow drift
         run: pnpm check:workflows
+        shell: bash
       - name: oxlint
         run: pnpm exec oxlint --deny-warnings
+        shell: bash
       - name: markdownlint
         run: pnpm exec markdownlint-cli2 '**/*.{md,mdx}' '#node_modules' '#build' '#dist' '#CHANGELOG.md'
+        shell: bash
       - name: Format check (oxfmt)
         run: pnpm check-format
+        shell: bash
   typecheck:
     name: Quality / Type Check
     runs-on: ubuntu-24.04
@@ -49,8 +54,10 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+        shell: bash
       - name: TypeScript
         run: pnpm typecheck
+        shell: bash
   terraform:
     name: Infrastructure / Terraform
     runs-on: ubuntu-24.04
@@ -63,10 +70,13 @@ jobs:
           terraform_wrapper: false
       - name: Terraform fmt
         run: terraform -chdir=infra/cloudflare fmt -check -recursive
+        shell: bash
       - name: Terraform init
         run: terraform -chdir=infra/cloudflare init -backend=false
+        shell: bash
       - name: Terraform validate
         run: terraform -chdir=infra/cloudflare validate
+        shell: bash
   test:
     name: Test / Unit
     runs-on: ubuntu-24.04
@@ -80,8 +90,10 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+        shell: bash
       - name: Vitest
         run: pnpm test
+        shell: bash
   build:
     name: Build / Smoke & Bundle
     runs-on: ubuntu-24.04
@@ -100,10 +112,34 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+        shell: bash
       - name: Smoke built site
         run: pnpm test:smoke
+        shell: bash
       - name: Cloudflare bundle dry run
         run: pnpm check:cloudflare
+        shell: bash
+  database:
+    name: Database / Schema drift
+    runs-on: ubuntu-24.04
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+        shell: bash
+      - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520
+        with:
+          version: 2.108.0
+      - name: pg-delta drift gate
+        run: pnpm db verify
+        shell: bash
   links:
     name: Quality / Links
     runs-on: ubuntu-24.04
