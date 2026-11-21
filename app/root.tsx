@@ -52,7 +52,7 @@ export function Layout({ children }: Readonly<{ children: ReactNode }>) {
         <Meta />
         <Links />
       </head>
-      <body className="antialiased" style={{ letterSpacing: 0 }}>
+      <body>
         {children}
         <ScrollRestoration />
         <Scripts />
