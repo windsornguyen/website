@@ -25,8 +25,8 @@
 
 /* --- Terminal font + weight only on the markdown content --- */
 .machine .machine-pre {
-  font-family: "Courier New", "Courier", "Lucida Console", monospace;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-weight: 400;
   font-size: 13px;
   line-height: 1.7;
   letter-spacing: 0;
