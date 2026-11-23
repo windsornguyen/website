@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.0](https://github.com/windsornguyen/website/compare/website-v0.2.1...website-v0.3.0) (2026-11-21)
+
+
+### Features
+
+* **db:** adopt Supabase's declarative pg-delta workflow ([#16](https://github.com/windsornguyen/website/issues/16)) ([8d46733](https://github.com/windsornguyen/website/commit/8d4673355cb5340fa74bbf2552b1cd1d3dc199a4))
+* **db:** integration fixture on a pinned, cached local Supabase ([#17](https://github.com/windsornguyen/website/issues/17)) ([fbc0827](https://github.com/windsornguyen/website/commit/fbc08279920ca9b8d2f7a99a2668eace35a24ae3))
+* **db:** pin pg-delta as migration codegen engine and gate schema drift ([#15](https://github.com/windsornguyen/website/issues/15)) ([9e63d74](https://github.com/windsornguyen/website/commit/9e63d74fa521a6bc2e390b2af681482da3b0498b))
+* **infra:** add cdn.windsornguyen.com R2 assets bucket ([#18](https://github.com/windsornguyen/website/issues/18)) ([3e7f4ca](https://github.com/windsornguyen/website/commit/3e7f4ca4ef7ea816d615edd1896c53b9ba896707))
+
 ## [0.2.1](https://github.com/windsornguyen/website/compare/website-v0.2.0...website-v0.2.1) (2026-09-02)
 
 
